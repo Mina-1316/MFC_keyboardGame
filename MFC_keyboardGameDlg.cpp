@@ -12,7 +12,7 @@
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
-#include "CPopup1.h" //싱글플레이 눌렀을때 나오는 모달창.h을 include
+#include "SinglePlayDialog.h" //싱글플레이 눌렀을때 나오는 모달창.h을 include
 
 
 // 응용 프로그램 정보에 사용되는 CAboutDlg 대화 상자입니다.

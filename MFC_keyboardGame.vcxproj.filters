@@ -65,5 +65,8 @@
     <Image Include="res\MFC_keyboardGame.ico">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="..\..\airplane.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
   </ItemGroup>
 </Project>
