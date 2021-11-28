@@ -183,6 +183,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CPopup1.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="MFC_keyboardGame.h" />
     <ClInclude Include="MFC_keyboardGameDlg.h" />
@@ -191,6 +192,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CPopup1.cpp" />
     <ClCompile Include="MFC_keyboardGame.cpp" />
     <ClCompile Include="MFC_keyboardGameDlg.cpp" />
     <ClCompile Include="pch.cpp">
