@@ -170,7 +170,7 @@ void CMFCkeyboardGameDlg::OnBnClickedButtonExit()
 
 void CMFCkeyboardGameDlg::OnBnClickedButtonSingleplay()
 {
-	CPopup1 PopupDialog; //싱글 플레이를 눌렀을때 모달창을 띄움
+	SinglePlayDialog PopupDialog; //싱글 플레이를 눌렀을때 모달창을 띄움
 	UpdateData(TRUE);
 	if (PopupDialog.DoModal() == IDOK) {
 		UpdateData(FALSE);
