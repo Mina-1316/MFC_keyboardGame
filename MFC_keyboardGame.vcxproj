@@ -209,8 +209,8 @@
     <None Include="res\MFCkeyboardGame.rc2" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\airplane.png" />
     <Image Include="res\MFC_keyboardGame.ico" />
+    <Image Include="res\plane.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
