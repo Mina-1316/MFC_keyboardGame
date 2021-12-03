@@ -1,11 +1,17 @@
 ﻿#pragma once
-
+#include "LinkedList.h"
 
 // SinglePlayDialog 대화 상자
 
 class SinglePlayDialog : public CDialog
 {
 	DECLARE_DYNAMIC(SinglePlayDialog)
+
+private:
+	const int timerTick = 70; //Timer 틱 간격
+
+	CPointList bullet;  //발사된 총알의 위치를 저장하는 LinkedList
+	CPointList enemy;	//생성된 적들의 위치를 저장하는 LinkedList
 
 public:
 	SinglePlayDialog(CWnd* pParent = nullptr);   // 표준 생성자입니다.

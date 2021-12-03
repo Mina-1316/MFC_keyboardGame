@@ -48,6 +48,9 @@ BOOL SinglePlayDialog::OnInitDialog() //비행기 비트맵을 LOAD하는걸 잘
 	airPlaneLocation.x = 100;
 	airPlaneLocation.y = 100;
 
+	SetTimer(0, timerTick, NULL);  //실행 후, 바로 타이머가 켜짐
+
+
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
@@ -93,7 +96,8 @@ void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent)
 {
 	switch(nIDEvent){
 	case 0:
-		
+
+		Invalidate(TRUE);
 		//비행기가 움직이는 메소드
 		drawAirplane();
 		//장애물 위에서 내려오는 메소드
