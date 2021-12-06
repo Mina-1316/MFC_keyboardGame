@@ -99,7 +99,7 @@ void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent)
 		//비행기가 움직이는 메소드
 		drawAirplane();
 		//장애물 위에서 내려오는 메소드
-
+		drawEnemy();
 		// 탄이 발사 되는 메소드
 	}
 
@@ -127,6 +127,24 @@ void SinglePlayDialog::drawAirplane() //비행기 그리는 메소드
 
 }
 
+void SinglePlayDialog::drawEnemy() {
+	//적을 생성하는 부분
+	
+	
+	
+	
+	CClientDC dc(this);
+	CPointList *pointer=&enemy;
+	
+	//생성된 적의 그림을 그리는 부분
+	while (pointer == nullptr) {
+		dc.Ellipse(pointer->point.x + enemySize, pointer->point.y + enemySize, pointer->point.x - enemySize, pointer->point.y - enemySize);
+	
+	}
+
+
+
+}
 
 void SinglePlayDialog::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) //키보드 방향키 WASD를 release할때 is*Pressed =  false 변경 
 {

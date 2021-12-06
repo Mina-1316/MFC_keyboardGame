@@ -10,6 +10,10 @@ class SinglePlayDialog : public CDialog
 private:
 	const int timerTick = 70; //Timer 틱 간격
 
+	const int enemySize = 30; //적의 반지름
+	const int maxEnemyGen = 2; //한번에 생성될 수 있는 적의 숫자
+	const int EnemySpeed = 3;
+
 	CPointList bullet;  //발사된 총알의 위치를 저장하는 LinkedList
 	CPointList enemy;	//생성된 적들의 위치를 저장하는 LinkedList
 
@@ -44,6 +48,6 @@ public:
 	//비행기 움직이기 위한 메소드
 	void drawAirplane();
 	//장애물이 떨어지기 위한 메소드
-
-	// 탄이 발사되기 위한 메소드
+	void drawEnemy();
+	//탄이 발사되기 위한 메소드
 };
