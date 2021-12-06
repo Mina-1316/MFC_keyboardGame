@@ -108,7 +108,6 @@ void SinglePlayDialog::drawEnemy() {
 	std::uniform_int_distribution<int> vectorGen((-1)*maxEnemySpeed, maxEnemySpeed); // 적의 속도를 생성하는 난수
 
 	for (int i = 0; i < enemyGen(gen); i++) {
-		enemyList.push_back(Enemy{.point = CPoint()})
 
 	}
 
