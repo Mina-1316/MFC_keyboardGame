@@ -1,5 +1,15 @@
 ﻿#pragma once
+#include <list>
+#include <random>
+
 #include "LinkedList.h"
+
+// 현 위치, 속도벡터를 담기 위한 구조체
+// 매 타이머 틱마다 벡터 방향으로 움직이도록 구현, vector 범위 내에서 랜덤으로 생성
+struct Enemy {
+	CPoint point;
+	CPoint vector;
+};
 
 // SinglePlayDialog 대화 상자
 
@@ -12,10 +22,20 @@ private:
 
 	const int enemySize = 30; //적의 반지름
 	const int maxEnemyGen = 2; //한번에 생성될 수 있는 적의 숫자
-	const int EnemySpeed = 3;
+	const int maxEnemySpeed = 5; //적의 최대 속도, y벡터는 음수값 불가능
+	const int maxEnemyXLoc = 1200; //적이 생성 될 수 있는 최대 X좌표
+	const int bulletSpeed = 6; //총알의 속도
 
-	CPointList bullet;  //발사된 총알의 위치를 저장하는 LinkedList
-	CPointList enemy;	//생성된 적들의 위치를 저장하는 LinkedList
+
+	//기존의 직접 만든 Single LinkedList에서 STL에서 지원하는 list로 교체
+	std::list<CPoint> bulletList;
+	std::list<Enemy> enemyList;
+
+	//난수 생성을 위한 생성자
+	std::random_device randDev;
+	std::mt19937 gen=std::mt19937(randDev);
+	
+	
 
 public:
 	SinglePlayDialog(CWnd* pParent = nullptr);   // 표준 생성자입니다.
@@ -40,6 +60,8 @@ public:
 	bool isAPressed;
 	bool isSPressed;
 	bool isDPressed;
+	bool isJPressed;
+
 	CPoint airPlaneLocation; //비행기의 위치 CPoint로 생성
 	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);

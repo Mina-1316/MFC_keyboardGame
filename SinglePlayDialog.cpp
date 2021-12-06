@@ -8,6 +8,7 @@
 #include "Resource.h"
 
 
+
 // SinglePlayDialog 대화 상자
 
 IMPLEMENT_DYNAMIC(SinglePlayDialog, CDialog)
@@ -56,41 +57,12 @@ BOOL SinglePlayDialog::OnInitDialog() //비행기 비트맵을 LOAD하는걸 잘
 				  // 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
 }
 
-
-void SinglePlayDialog::OnPaint()  //싱글 게임 실행시SinglePlayDialog에 비행기 TEXT문자를 그리기 위해서 추가했다.
+//싱글 게임 실행시SinglePlayDialog에 비행기 TEXT문자를 그리기 위해서 추가했다.
+void SinglePlayDialog::OnPaint()  
 {
 	
 }
 
-
-
-void SinglePlayDialog::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) //키보드 방향키 WASD를 각각 아래로 눌렀을때 is*Pressed true 변경 , 각각 10정도 이동
-{
-	switch (nChar) {
-	case 'S':
-	case 's':
-		isSPressed = true;
-		break;
-
-	case 'A':
-	case 'a':
-		isAPressed = true;
-		break;
-
-	case 'W':
-	case 'w':
-		isWPressed = true;
-		break;
-
-	case 'D':
-	case 'd':
-		isDPressed = true;
-		break;
-	}
-
-	Invalidate(TRUE);
-	CDialog::OnKeyDown(nChar, nRepCnt, nFlags);
-}
 
 void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent)
 {
@@ -100,9 +72,10 @@ void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent)
 		Invalidate(TRUE);
 		//비행기가 움직이는 메소드
 		drawAirplane();
-		//장애물 위에서 내려오는 메소드
+		//장애물을 그리는 메소드
 		drawEnemy();
-		// 탄이 발사 되는 메소드
+		//탄이 발사 되는 메소드
+
 	}
 
 }
@@ -131,21 +104,51 @@ void SinglePlayDialog::drawAirplane() //비행기 그리는 메소드
 
 void SinglePlayDialog::drawEnemy() {
 	//적을 생성하는 부분
-	
-	
-	
-	
-	CClientDC dc(this);
-	CPointList *pointer=&enemy;
-	
-	//생성된 적의 그림을 그리는 부분
-	while (pointer == nullptr) {
-		dc.Ellipse(pointer->point.x + enemySize, pointer->point.y + enemySize, pointer->point.x - enemySize, pointer->point.y - enemySize);
-	
+	std::uniform_int_distribution<int> enemyGen(0, maxEnemyGen);	//생성하는 적 숫자를 설정하는 난수
+	std::uniform_int_distribution<int> vectorGen((-1)*maxEnemySpeed, maxEnemySpeed); // 적의 속도를 생성하는 난수
+
+	for (int i = 0; i < enemyGen(gen); i++) {
+		enemyList.push_back(Enemy{.point = CPoint()})
+
 	}
 
+	CClientDC dc(this);
 
 
+}
+
+void SinglePlayDialog::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) //키보드 방향키 WASD를 각각 아래로 눌렀을때 is*Pressed true 변경 , 각각 10정도 이동
+{
+	switch (nChar) {
+	case 'S':
+	case 's':
+		isSPressed = true;
+		break;
+
+	case 'A':
+	case 'a':
+		isAPressed = true;
+		break;
+
+	case 'W':
+	case 'w':
+		isWPressed = true;
+		break;
+
+	case 'D':
+	case 'd':
+		isDPressed = true;
+		break;
+
+	case 'J':
+	case 'j':
+		isJPressed = false;
+		break;
+
+	}
+
+	Invalidate(TRUE);
+	CDialog::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
 void SinglePlayDialog::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) //키보드 방향키 WASD를 release할때 is*Pressed =  false 변경 
@@ -170,6 +173,11 @@ void SinglePlayDialog::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) //키보�
 	case 'D':
 	case 'd':
 		isDPressed = false;
+		break;
+
+	case 'J':
+	case 'j':
+		isJPressed = false;
 		break;
 
 	CDialog::OnKeyUp(nChar, nRepCnt, nFlags);
