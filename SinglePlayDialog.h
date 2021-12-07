@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include <list>
 #include <random>
+#include <cstdlib>
+#include <cmath>
 
 // 현 위치, 속도벡터를 담기 위한 구조체
 // 매 타이머 틱마다 벡터 방향으로 움직이도록 구현, vector 범위 내에서 랜덤으로 생성
@@ -16,18 +18,20 @@ class SinglePlayDialog : public CDialog
 	DECLARE_DYNAMIC(SinglePlayDialog)
 
 private:
+	//----const-----
+	//시스템 사용
 	const int timerTick = 70; //Timer 틱 간격
-
-
 	const int dialogXSize = 1200; //창의 X축 크기
 	const int dialogYSize = 800; //창의 Y축 크기
 
-	const int enemySize = 30; //적의 반지름
+	//매직넘버
+	const int enemySize = 8; //적의 반지름
 	const int maxEnemyGen = 2; //한번에 생성될 수 있는 적의 숫자
 	const int maxEnemySpeed = 5; //적의 최대 속도, y벡터는 음수값 불가능
-	const int bulletSpeed = 6; //총알의 속도
+	const int bulletSpeed = 10; //총알의 속도
+	const int planeSpeed = 6;
 
-
+	//-----var-----
 	//기존의 직접 만든 Single LinkedList에서 STL에서 지원하는 list로 교체
 	std::list<CPoint> bulletList;
 	std::list<Enemy> enemyList;
@@ -35,14 +39,18 @@ private:
 	//난수 생성을 위한 생성자
 	std::mt19937 randEng;
 
+	int timertick = 0;		//시간이 얼마나 지났는지를 체크하는 변수
 
-	//Methods
-	//비행기 움직이기 위한 메소드
-	void drawAirplane();
-	//장애물이 떨어지기 위한 메소드
-	void drawEnemy();
-	//탄이 발사되기 위한 메소드
-	
+
+	//-----Methods-----
+	//비행기 움직임을 처리하는 메소드
+	void processAirplane();
+	//장애물의 움직임을 처리하는 메소드
+	void processEnemy();
+	//탄의 움직임을 처리하는 메소드
+	void processBullet();
+	//처리 완료 후, 화면을 그리는 메소드
+	void drawScene();
 	
 
 public:

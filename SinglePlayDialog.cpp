@@ -83,11 +83,14 @@ void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent){
 	case 0:
 
 		Invalidate(TRUE);
-		//비행기가 움직이는 메소드
-		drawAirplane();
-		//장애물을 그리는 메소드
-		//drawEnemy();
-		//탄이 발사 되는 메소드
+		//비행기 움직임을 처리하는 메소드
+		void processAirplane();
+		//탄의 움직임을 처리하는 메소드
+		void processBullet();
+		//장애물의 움직임을 처리하는 메소드
+		void processEnemy();
+		//처리 완료 후, 화면을 그리는 메소드
+		void drawScene();
 		break;
 	}
 
@@ -95,38 +98,54 @@ void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent){
 }
 
 
-void SinglePlayDialog::drawAirplane() //비행기 그리는 메소드
+void SinglePlayDialog::processAirplane() //비행기 그리는 메소드
 {
-	
-	if (isSPressed) airPlaneLocation.SetPoint(airPlaneLocation.x, airPlaneLocation.y + 10);
-	if (isWPressed) airPlaneLocation.SetPoint(airPlaneLocation.x, airPlaneLocation.y - 10);
-	if (isAPressed) airPlaneLocation.SetPoint(airPlaneLocation.x-10, airPlaneLocation.y);
-	if (isDPressed) airPlaneLocation.SetPoint(airPlaneLocation.x+10, airPlaneLocation.y);
+	if (isSPressed) airPlaneLocation.SetPoint(airPlaneLocation.x, airPlaneLocation.y + planeSpeed);
+	if (isWPressed) airPlaneLocation.SetPoint(airPlaneLocation.x, airPlaneLocation.y - planeSpeed);
+	if (isAPressed) airPlaneLocation.SetPoint(airPlaneLocation.x - planeSpeed, airPlaneLocation.y);
+	if (isDPressed) airPlaneLocation.SetPoint(airPlaneLocation.x + planeSpeed, airPlaneLocation.y);
+}
 
-	CClientDC dc(this);
-	CDC MemDC;
-	MemDC.CreateCompatibleDC(&dc);
-	CBitmap bitmap;
-	bitmap.LoadBitmap(IDB_PLANE);
-	CBitmap* oldbitmap = MemDC.SelectObject(&bitmap);
-	
-    dc.BitBlt(airPlaneLocation.x,airPlaneLocation.y, 100, 90, &MemDC, 0, 0, SRCCOPY);
-		
-	dc.SelectObject(oldbitmap);
-	bitmap.DeleteObject();
+void processBullet() {
 
 }
 
-void SinglePlayDialog::drawEnemy() {
+void SinglePlayDialog::processEnemy() {
 	//적을 생성하는 부분
 	std::uniform_int_distribution<int> enemyGen(0, maxEnemyGen);	//생성하는 적 숫자를 설정하는 난수
 	std::uniform_int_distribution<int> vectorGen((-1)*maxEnemySpeed, maxEnemySpeed); // 적의 속도를 생성하는 난수
+	std::uniform_int_distribution<int> locationGen(10, dialogXSize - 10);
 
-	for (int i = 0; i < enemyGen(randEng); i++) {
+	for (int i = 0; i < enemyGen(randEng); i++) 
+	{
+		//무작위 위치에 적을 생성해서, enemyList에 넣음
+		enemyList.push_back(
+			Enemy{CPoint(locationGen(randEng),-10), CPoint(vectorGen(randEng),std::abs(vectorGen(randEng))) 
+			});
 	}
 
-	CClientDC dc(this);
+	//벡터만큼 움직이는 적을 구현하는 람다 표현식
+	auto doEnemyMove = [](Enemy tgt) 
+	{
+		tgt.point.SetPoint(tgt.point.x + tgt.vector.x, tgt.point.y + tgt.vector.y); 
+	};
+	std::for_each(enemyList.begin(), enemyList.end(), doEnemyMove);
 
+	//화면 밖으로 벗어난 적을 삭제하는 람다 표현식
+	const int enemySize = this->enemySize;
+	for (auto bullet : bulletList) {
+		//(x좌표차^2)+(y좌표차^2)가 실제 원 반지름 안쪽에 있는 경우, true를 반환하는 람다식
+		auto checkDist = [bullet, enemySize](Enemy tgt) {
+			return (pow(bullet.x - tgt.point.x, 2) + pow(bullet.y - tgt.point.y, 2)) < pow(enemySize, 2) ?
+				true : false;
+		};
+		//checkDist 람다식을 기반으로, 일정 범위 안에 들어올 경우, 데이터를 삭제시킨다.
+		std::remove_if(enemyList.begin(), enemyList.end(), checkDist);
+	}
+}
+
+void drawScene() 
+{
 
 }
 
