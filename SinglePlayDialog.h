@@ -2,8 +2,6 @@
 #include <list>
 #include <random>
 
-#include "LinkedList.h"
-
 // 현 위치, 속도벡터를 담기 위한 구조체
 // 매 타이머 틱마다 벡터 방향으로 움직이도록 구현, vector 범위 내에서 랜덤으로 생성
 struct Enemy {
@@ -43,7 +41,7 @@ public:
 
 // 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
-	enum { IDD = IDD_DIALOG1 };
+	enum { IDD = IDD_SINGLEPLAY_DIALOG };
 #endif
 
 protected:
@@ -72,4 +70,5 @@ public:
 	//장애물이 떨어지기 위한 메소드
 	void drawEnemy();
 	//탄이 발사되기 위한 메소드
+	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
 };

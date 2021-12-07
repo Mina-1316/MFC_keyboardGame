@@ -35,6 +35,7 @@ BEGIN_MESSAGE_MAP(SinglePlayDialog, CDialog)
 	ON_WM_KEYDOWN()
 	ON_WM_KEYUP()
 	ON_WM_TIMER()
+	ON_WM_GETMINMAXINFO()
 END_MESSAGE_MAP()
 
 
@@ -63,6 +64,13 @@ void SinglePlayDialog::OnPaint()
 	
 }
 
+//
+void SinglePlayDialog::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+
+	CDialog::OnGetMinMaxInfo(lpMMI);
+}
 
 void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent)
 {
@@ -108,7 +116,6 @@ void SinglePlayDialog::drawEnemy() {
 	std::uniform_int_distribution<int> vectorGen((-1)*maxEnemySpeed, maxEnemySpeed); // 적의 속도를 생성하는 난수
 
 	for (int i = 0; i < enemyGen(gen); i++) {
-
 	}
 
 	CClientDC dc(this);
@@ -166,7 +173,7 @@ void SinglePlayDialog::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) //키보�
 
 	case 'W':
 	case 'w':
-		isWPressed = false;		
+		isWPressed = false;
 		break;
 
 	case 'D':
@@ -179,6 +186,10 @@ void SinglePlayDialog::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) //키보�
 		isJPressed = false;
 		break;
 
-	CDialog::OnKeyUp(nChar, nRepCnt, nFlags);
+		CDialog::OnKeyUp(nChar, nRepCnt, nFlags);
+	}
 }
 
+
+
+	
