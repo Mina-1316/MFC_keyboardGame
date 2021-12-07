@@ -18,10 +18,13 @@ class SinglePlayDialog : public CDialog
 private:
 	const int timerTick = 70; //Timer 틱 간격
 
+
+	const int dialogXSize = 1200; //창의 X축 크기
+	const int dialogYSize = 800; //창의 Y축 크기
+
 	const int enemySize = 30; //적의 반지름
 	const int maxEnemyGen = 2; //한번에 생성될 수 있는 적의 숫자
 	const int maxEnemySpeed = 5; //적의 최대 속도, y벡터는 음수값 불가능
-	const int maxEnemyXLoc = 1200; //적이 생성 될 수 있는 최대 X좌표
 	const int bulletSpeed = 6; //총알의 속도
 
 
@@ -30,8 +33,7 @@ private:
 	std::list<Enemy> enemyList;
 
 	//난수 생성을 위한 생성자
-	std::random_device randDev;
-	std::mt19937 gen=std::mt19937(randDev);
+	std::mt19937 randEng;
 	
 	
 

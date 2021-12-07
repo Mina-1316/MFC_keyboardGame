@@ -50,8 +50,10 @@ BOOL SinglePlayDialog::OnInitDialog() //비행기 비트맵을 LOAD하는걸 잘
 	airPlaneLocation.x = 100;
 	airPlaneLocation.y = 100;
 
-	SetTimer(0, timerTick, NULL);  //실행 후, 바로 타이머가 켜짐
+	std::random_device randDev;
+	randEng.seed(randDev());
 
+	SetTimer(0, timerTick, NULL);  //실행 후, 바로 타이머가 켜짐
 
 
 	return TRUE;  // return TRUE unless you set the focus to a control
@@ -67,7 +69,10 @@ void SinglePlayDialog::OnPaint()
 //
 void SinglePlayDialog::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
 {
-	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	// 창의 크기를 고정 시킴 - 최대로 늘어나는 범위, 최소로 줄어드는 범위 설정
+	lpMMI->ptMinTrackSize = CPoint(dialogXSize, dialogYSize);
+	lpMMI->ptMaxTrackSize = CPoint(dialogXSize, dialogYSize);
+
 
 	CDialog::OnGetMinMaxInfo(lpMMI);
 }
@@ -81,9 +86,9 @@ void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent)
 		//비행기가 움직이는 메소드
 		drawAirplane();
 		//장애물을 그리는 메소드
-		drawEnemy();
+		//drawEnemy();
 		//탄이 발사 되는 메소드
-
+		break;
 	}
 
 }
@@ -103,7 +108,7 @@ void SinglePlayDialog::drawAirplane() //비행기 그리는 메소드
 	bitmap.LoadBitmap(IDB_PLANE);
 	CBitmap* oldbitmap = MemDC.SelectObject(&bitmap);
 	
-    dc.BitBlt(airPlaneLocation.x,airPlaneLocation.y, 200, 200, &MemDC, 120, 120, SRCCOPY);
+    dc.BitBlt(airPlaneLocation.x,airPlaneLocation.y, 100, 90, &MemDC, 0, 0, SRCCOPY);
 		
 	dc.SelectObject(oldbitmap);
 	bitmap.DeleteObject();
@@ -115,7 +120,7 @@ void SinglePlayDialog::drawEnemy() {
 	std::uniform_int_distribution<int> enemyGen(0, maxEnemyGen);	//생성하는 적 숫자를 설정하는 난수
 	std::uniform_int_distribution<int> vectorGen((-1)*maxEnemySpeed, maxEnemySpeed); // 적의 속도를 생성하는 난수
 
-	for (int i = 0; i < enemyGen(gen); i++) {
+	for (int i = 0; i < enemyGen(randEng); i++) {
 	}
 
 	CClientDC dc(this);
