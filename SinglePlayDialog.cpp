@@ -82,7 +82,7 @@ void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent){
 	switch (nIDEvent) {
 	case 0:
 
-		Invalidate(TRUE);
+		Invalidate(FALSE);
 		//비행기 움직임을 처리하는 메소드
 		void processAirplane();
 		//탄의 움직임을 처리하는 메소드
@@ -91,6 +91,7 @@ void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent){
 		void processEnemy();
 		//처리 완료 후, 화면을 그리는 메소드
 		void drawScene();
+		timertick++;
 		break;
 	}
 
@@ -100,6 +101,7 @@ void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent){
 
 void SinglePlayDialog::processAirplane() //비행기 그리는 메소드
 {
+	//각 키의 입력 상태에 따라, 비행기 좌표를 조종함.
 	if (isSPressed) airPlaneLocation.SetPoint(airPlaneLocation.x, airPlaneLocation.y + planeSpeed);
 	if (isWPressed) airPlaneLocation.SetPoint(airPlaneLocation.x, airPlaneLocation.y - planeSpeed);
 	if (isAPressed) airPlaneLocation.SetPoint(airPlaneLocation.x - planeSpeed, airPlaneLocation.y);
@@ -114,7 +116,7 @@ void SinglePlayDialog::processEnemy() {
 	//적을 생성하는 부분
 	std::uniform_int_distribution<int> enemyGen(0, maxEnemyGen);	//생성하는 적 숫자를 설정하는 난수
 	std::uniform_int_distribution<int> vectorGen((-1)*maxEnemySpeed, maxEnemySpeed); // 적의 속도를 생성하는 난수
-	std::uniform_int_distribution<int> locationGen(10, dialogXSize - 10);
+	std::uniform_int_distribution<int> locationGen(10, dialogXSize - 10);	//적의 위치를 생성하는 난수
 
 	for (int i = 0; i < enemyGen(randEng); i++) 
 	{
@@ -185,7 +187,6 @@ void SinglePlayDialog::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) //키보
 
 void SinglePlayDialog::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) //키보드 방향키 WASD를 release할때 is*Pressed =  false 변경 
 {
-	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	switch (nChar) {
 	case 'S':
 	case 's':
@@ -215,8 +216,3 @@ void SinglePlayDialog::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) //키보�
 		CDialog::OnKeyUp(nChar, nRepCnt, nFlags);
 	}
 }
-
-
-
-	
-
