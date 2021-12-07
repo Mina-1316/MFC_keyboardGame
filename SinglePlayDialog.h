@@ -34,6 +34,14 @@ private:
 
 	//난수 생성을 위한 생성자
 	std::mt19937 randEng;
+
+
+	//Methods
+	//비행기 움직이기 위한 메소드
+	void drawAirplane();
+	//장애물이 떨어지기 위한 메소드
+	void drawEnemy();
+	//탄이 발사되기 위한 메소드
 	
 	
 
@@ -53,24 +61,18 @@ protected:
 public:
 	
 	virtual BOOL OnInitDialog();
-	afx_msg void OnPaint();
 	
      //각각의 버튼 눌렀을때의 true,false 눌렀을때 true , 때면 false
-	bool isWPressed;
-	bool isAPressed;
-	bool isSPressed;
-	bool isDPressed;
-	bool isJPressed;
+	bool isWPressed=false;
+	bool isAPressed=false;
+	bool isSPressed=false;
+	bool isDPressed=false;
+	bool isJPressed=false;
 
 	CPoint airPlaneLocation; //비행기의 위치 CPoint로 생성
 	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
-	afx_msg void OnTimer(UINT_PTR nIDEvent);
-
-	//비행기 움직이기 위한 메소드
-	void drawAirplane();
-	//장애물이 떨어지기 위한 메소드
-	void drawEnemy();
-	//탄이 발사되기 위한 메소드
 	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnPaint();
 };

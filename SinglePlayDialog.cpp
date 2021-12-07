@@ -34,8 +34,9 @@ BEGIN_MESSAGE_MAP(SinglePlayDialog, CDialog)
 	ON_WM_PAINT()
 	ON_WM_KEYDOWN()
 	ON_WM_KEYUP()
-	ON_WM_TIMER()
 	ON_WM_GETMINMAXINFO()
+	ON_WM_TIMER()
+	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 
@@ -47,8 +48,8 @@ BOOL SinglePlayDialog::OnInitDialog() //비행기 비트맵을 LOAD하는걸 잘
 {
 	CDialog::OnInitDialog();
 
-	airPlaneLocation.x = 100;
-	airPlaneLocation.y = 100;
+	airPlaneLocation.x = 600;
+	airPlaneLocation.y = 720;
 
 	std::random_device randDev;
 	randEng.seed(randDev());
@@ -60,15 +61,7 @@ BOOL SinglePlayDialog::OnInitDialog() //비행기 비트맵을 LOAD하는걸 잘
 				  // 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
 }
 
-//싱글 게임 실행시SinglePlayDialog에 비행기 TEXT문자를 그리기 위해서 추가했다.
-void SinglePlayDialog::OnPaint()  
-{
-	
-}
-
-//
-void SinglePlayDialog::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
-{
+void SinglePlayDialog::OnGetMinMaxInfo(MINMAXINFO* lpMMI){
 	// 창의 크기를 고정 시킴 - 최대로 늘어나는 범위, 최소로 줄어드는 범위 설정
 	lpMMI->ptMinTrackSize = CPoint(dialogXSize, dialogYSize);
 	lpMMI->ptMaxTrackSize = CPoint(dialogXSize, dialogYSize);
@@ -77,9 +70,16 @@ void SinglePlayDialog::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
 	CDialog::OnGetMinMaxInfo(lpMMI);
 }
 
-void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent)
+//싱글 게임 실행시SinglePlayDialog에 비행기 TEXT문자를 그리기 위해서 추가했다.
+void SinglePlayDialog::OnPaint()
 {
-	switch(nIDEvent){
+	CPaintDC dc(this); // device context for painting
+					   // TODO: 여기에 메시지 처리기 코드를 추가합니다.
+					   // 그리기 메시지에 대해서는 CDialog::OnPaint()을(를) 호출하지 마십시오.
+}
+
+void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent){
+	switch (nIDEvent) {
 	case 0:
 
 		Invalidate(TRUE);
@@ -91,7 +91,9 @@ void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent)
 		break;
 	}
 
+	CDialog::OnTimer(nIDEvent);
 }
+
 
 void SinglePlayDialog::drawAirplane() //비행기 그리는 메소드
 {
@@ -198,3 +200,4 @@ void SinglePlayDialog::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) //키보�
 
 
 	
+
