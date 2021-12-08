@@ -48,8 +48,11 @@ BOOL SinglePlayDialog::OnInitDialog() //비행기 비트맵을 LOAD하는걸 잘
 {
 	CDialog::OnInitDialog();
 
-	airPlaneLocation.x = 60;
-	airPlaneLocation.y = 72;
+	MoveWindow(0, 0, dialogXSize, dialogYSize);
+
+	airPlaneLocation.x = 600;
+	airPlaneLocation.y = 720;
+
 
 	std::random_device randDev;
 	randEng.seed(randDev());
@@ -85,7 +88,7 @@ void SinglePlayDialog::OnPaint()
 	CBitmap bitmap;
 	bitmap.LoadBitmap(IDB_PLANE);
 	CBitmap* oldbitmap = MemDC.SelectObject(&bitmap);
-	cdc.BitBlt(airPlaneLocation.x, airPlaneLocation.y, 100, 90, &MemDC, 10, 10, SRCCOPY);
+	cdc.BitBlt(airPlaneLocation.x, airPlaneLocation.y, 100, 90, &MemDC, 0, 0, SRCCOPY);
 	cdc.SelectObject(oldbitmap);
 	bitmap.DeleteObject();
 
@@ -143,16 +146,20 @@ void SinglePlayDialog::processAirplane() //비행기 그리는 메소드
 }
 
 void SinglePlayDialog::processBullet() {	//총알의 이동을 제어하는 메소드
-
+	
 	//총알의 이동을 제어하는 람다식
 	//해당 클래스에 상수로 정의된 탄의 속도만큼 y축 위로 전진한다(-한다)
-		int bulletSpeed = this->bulletSpeed;
-		auto doBulletMove = [bulletSpeed](CPoint& tgt) {
-			tgt.SetPoint(tgt.x, tgt.y - bulletSpeed);
-		};
 
-		std::for_each(bulletList.begin(), bulletList.end(), doBulletMove);
-	
+	int bulletSpeed = this->bulletSpeed;
+	auto doBulletMove = [bulletSpeed](CPoint& tgt) {
+		tgt.SetPoint(tgt.x, tgt.y - bulletSpeed);
+	};
+	std::for_each(bulletList.begin(), bulletList.end(), doBulletMove);
+
+	//총알이 맵 밖에 나갈 경우 제거하는 람다식
+	auto deleteBullet = [bulletSpeed](CPoint tgt) {
+		
+	};
 }
 
 void SinglePlayDialog::processEnemy() {
