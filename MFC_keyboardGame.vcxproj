@@ -184,6 +184,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="happyhttp.h" />
+    <ClInclude Include="LeaderboardDialog.h" />
     <ClInclude Include="SinglePlayDialog.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="MFC_keyboardGame.h" />
@@ -194,6 +195,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="happyhttp.cpp" />
+    <ClCompile Include="LeaderboardDialog.cpp" />
     <ClCompile Include="SinglePlayDialog.cpp" />
     <ClCompile Include="MFC_keyboardGame.cpp" />
     <ClCompile Include="MFC_keyboardGameDlg.cpp" />
