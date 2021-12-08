@@ -153,6 +153,18 @@ void SinglePlayDialog::processEnemy() {
 		//checkDist 람다식을 기반으로, 일정 범위 안에 들어올 경우, 데이터를 삭제시킨다.
 		std::remove_if(enemyList.begin(), enemyList.end(), checkDist);
 	}
+
+	//밖으로 나간 적을 삭제하는 람다 표현식
+	const int dialogXSize = this->dialogXSize;
+	const int dialogYSize = this->dialogYSize;
+	auto deleteOutsideEnemy = [enemySize, dialogXSize, dialogYSize](Enemy tgt) {
+			//x축 밖에 나갔는지 검사
+		return (tgt.point.x<0-enemySize||tgt.point.x>dialogXSize+enemySize||
+			//y축 아래로 내려갔는지 검사
+			tgt.point.y>dialogYSize+enemySize)?	true : false;
+	};
+	//x축 좌/우 또는 y축 아래로 나간 것이 감지될 경우, 적을 삭제시킨다.
+	std::remove_if(enemyList.begin(), enemyList.end(), deleteOutsideEnemy);
 }
 
 void SinglePlayDialog::drawScene() //모든것을 그리는 메소드

@@ -40,7 +40,7 @@ private:
 	std::mt19937 randEng;
 
 	int timertick = 0;		//시간이 얼마나 지났는지를 체크하는 변수
-
+	int score = 0;			//점수
 
 	//-----Methods-----
 	//비행기 움직임을 처리하는 메소드
