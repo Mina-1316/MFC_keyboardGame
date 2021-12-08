@@ -142,7 +142,7 @@ void SinglePlayDialog::processEnemy() {
 	};
 	std::for_each(enemyList.begin(), enemyList.end(), doEnemyMove);
 
-	//화면 밖으로 벗어난 적을 삭제하는 람다 표현식
+	//탄에 맞은 적을 삭제하는 람다 표현식
 	const int enemySize = this->enemySize;
 	for (auto bullet : bulletList) {
 		//(x좌표차^2)+(y좌표차^2)가 실제 원 반지름 안쪽에 있는 경우, true를 반환하는 람다식
