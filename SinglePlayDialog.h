@@ -30,7 +30,9 @@ private:
 	const int maxEnemySpeed = 5; //적의 최대 속도, y벡터는 음수값 불가능
 	const int bulletSpeed = 10; //총알의 속도
 	const int bulletSize = 4; //총알의 반지름(원)
-	const int planeSpeed = 6;
+	const int planeSpeed = 6; //비행기의 속도
+	const int airplaneXSize = 40; //비행기의 가로 크기
+	const int airplaneYSize = 38; //비행기의 세로 크기
 
 	//-----var-----
 	//기존의 직접 만든 Single LinkedList에서 STL에서 지원하는 list로 교체

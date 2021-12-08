@@ -48,6 +48,7 @@ BOOL SinglePlayDialog::OnInitDialog() //비행기 비트맵을 LOAD하는걸 잘
 {
 	CDialog::OnInitDialog();
 
+	//다이얼로그의 크기를 고정시킴
 	MoveWindow(0, 0, dialogXSize, dialogYSize);
 
 	airPlaneLocation.x = 600;
@@ -87,7 +88,8 @@ void SinglePlayDialog::OnPaint()
 	CBitmap bitmap;
 	bitmap.LoadBitmap(IDB_PLANE);
 	CBitmap* oldbitmap = MemDC.SelectObject(&bitmap);
-	cdc.BitBlt(airPlaneLocation.x, airPlaneLocation.y, 100, 90, &MemDC, 0, 0, SRCCOPY);
+	cdc.BitBlt(airPlaneLocation.x-(airplaneXSize/2), airPlaneLocation.y-(airplaneYSize/2),
+		airplaneXSize, airplaneYSize, &MemDC, 0, 0, SRCCOPY);
 	cdc.SelectObject(oldbitmap);
 	bitmap.DeleteObject();
 
@@ -226,7 +228,7 @@ void SinglePlayDialog::drawScene() //모든것을 그리는 메소드
 
 	//탄 그리기 필요
 	brush.CreateSolidBrush(RGB(255,0,0)); //빨간색 원의 반지름 4 => 탄
-	CBrush* oldbrush = dc.SelectObject(&brush);
+	oldbrush = dc.SelectObject(&brush);
 	for (auto bullet : bulletList) {
 		dc.Ellipse(bullet.x - bulletSize, bullet.y - bulletSize, bullet.x + bulletSize, bullet.y + bulletSize); // bullet.point.x , y가 중심점
 	}
