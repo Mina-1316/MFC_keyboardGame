@@ -8,6 +8,7 @@
 #include "Resource.h"
 
 
+
 // SinglePlayDialog 대화 상자
 
 IMPLEMENT_DYNAMIC(SinglePlayDialog, CDialog)
@@ -33,7 +34,9 @@ BEGIN_MESSAGE_MAP(SinglePlayDialog, CDialog)
 	ON_WM_PAINT()
 	ON_WM_KEYDOWN()
 	ON_WM_KEYUP()
+	ON_WM_GETMINMAXINFO()
 	ON_WM_TIMER()
+	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 
@@ -45,24 +48,108 @@ BOOL SinglePlayDialog::OnInitDialog() //비행기 비트맵을 LOAD하는걸 잘
 {
 	CDialog::OnInitDialog();
 
-	airPlaneLocation.x = 100;
-	airPlaneLocation.y = 100;
+	airPlaneLocation.x = 600;
+	airPlaneLocation.y = 720;
+
+	std::random_device randDev;
+	randEng.seed(randDev());
 
 	SetTimer(0, timerTick, NULL);  //실행 후, 바로 타이머가 켜짐
-
 
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
 }
 
+void SinglePlayDialog::OnGetMinMaxInfo(MINMAXINFO* lpMMI){
+	// 창의 크기를 고정 시킴 - 최대로 늘어나는 범위, 최소로 줄어드는 범위 설정
+	lpMMI->ptMinTrackSize = CPoint(dialogXSize, dialogYSize);
+	lpMMI->ptMaxTrackSize = CPoint(dialogXSize, dialogYSize);
 
-void SinglePlayDialog::OnPaint()  //싱글 게임 실행시SinglePlayDialog에 비행기 TEXT문자를 그리기 위해서 추가했다.
+
+	CDialog::OnGetMinMaxInfo(lpMMI);
+}
+
+//싱글 게임 실행시SinglePlayDialog에 비행기 TEXT문자를 그리기 위해서 추가했다.
+void SinglePlayDialog::OnPaint()
 {
-	
+	CPaintDC dc(this); // device context for painting
+					   // TODO: 여기에 메시지 처리기 코드를 추가합니다.
+					   // 그리기 메시지에 대해서는 CDialog::OnPaint()을(를) 호출하지 마십시오.
+}
+
+void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent){
+	switch (nIDEvent) {
+	case 0:
+
+		Invalidate(FALSE);
+		//비행기 움직임을 처리하는 메소드
+		void processAirplane();
+		//탄의 움직임을 처리하는 메소드
+		void processBullet();
+		//장애물의 움직임을 처리하는 메소드
+		void processEnemy();
+		//처리 완료 후, 화면을 그리는 메소드
+		void drawScene();
+		timertick++;
+		break;
+	}
+
+	CDialog::OnTimer(nIDEvent);
 }
 
 
+void SinglePlayDialog::processAirplane() //비행기 그리는 메소드
+{
+	//각 키의 입력 상태에 따라, 비행기 좌표를 조종함.
+	if (isSPressed) airPlaneLocation.SetPoint(airPlaneLocation.x, airPlaneLocation.y + planeSpeed);
+	if (isWPressed) airPlaneLocation.SetPoint(airPlaneLocation.x, airPlaneLocation.y - planeSpeed);
+	if (isAPressed) airPlaneLocation.SetPoint(airPlaneLocation.x - planeSpeed, airPlaneLocation.y);
+	if (isDPressed) airPlaneLocation.SetPoint(airPlaneLocation.x + planeSpeed, airPlaneLocation.y);
+}
+
+void processBullet() {
+
+}
+
+void SinglePlayDialog::processEnemy() {
+	//적을 생성하는 부분
+	std::uniform_int_distribution<int> enemyGen(0, maxEnemyGen);	//생성하는 적 숫자를 설정하는 난수
+	std::uniform_int_distribution<int> vectorGen((-1)*maxEnemySpeed, maxEnemySpeed); // 적의 속도를 생성하는 난수
+	std::uniform_int_distribution<int> locationGen(10, dialogXSize - 10);	//적의 위치를 생성하는 난수
+
+	for (int i = 0; i < enemyGen(randEng); i++) 
+	{
+		//무작위 위치에 적을 생성해서, enemyList에 넣음
+		enemyList.push_back(
+			Enemy{CPoint(locationGen(randEng),-10), CPoint(vectorGen(randEng),std::abs(vectorGen(randEng))) 
+			});
+	}
+
+	//벡터만큼 움직이는 적을 구현하는 람다 표현식
+	auto doEnemyMove = [](Enemy tgt) 
+	{
+		tgt.point.SetPoint(tgt.point.x + tgt.vector.x, tgt.point.y + tgt.vector.y); 
+	};
+	std::for_each(enemyList.begin(), enemyList.end(), doEnemyMove);
+
+	//화면 밖으로 벗어난 적을 삭제하는 람다 표현식
+	const int enemySize = this->enemySize;
+	for (auto bullet : bulletList) {
+		//(x좌표차^2)+(y좌표차^2)가 실제 원 반지름 안쪽에 있는 경우, true를 반환하는 람다식
+		auto checkDist = [bullet, enemySize](Enemy tgt) {
+			return (pow(bullet.x - tgt.point.x, 2) + pow(bullet.y - tgt.point.y, 2)) < pow(enemySize, 2) ?
+				true : false;
+		};
+		//checkDist 람다식을 기반으로, 일정 범위 안에 들어올 경우, 데이터를 삭제시킨다.
+		std::remove_if(enemyList.begin(), enemyList.end(), checkDist);
+	}
+}
+
+void drawScene() 
+{
+
+}
 
 void SinglePlayDialog::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) //키보드 방향키 WASD를 각각 아래로 눌렀을때 is*Pressed true 변경 , 각각 10정도 이동
 {
@@ -86,53 +173,20 @@ void SinglePlayDialog::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) //키보
 	case 'd':
 		isDPressed = true;
 		break;
+
+	case 'J':
+	case 'j':
+		isJPressed = false;
+		break;
+
 	}
 
 	Invalidate(TRUE);
 	CDialog::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
-void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent)
-{
-	switch(nIDEvent){
-	case 0:
-
-		Invalidate(TRUE);
-		//비행기가 움직이는 메소드
-		drawAirplane();
-		//장애물 위에서 내려오는 메소드
-
-		// 탄이 발사 되는 메소드
-	}
-
-}
-
-void SinglePlayDialog::drawAirplane() //비행기 그리는 메소드
-{
-	
-	if (isSPressed) airPlaneLocation.SetPoint(airPlaneLocation.x, airPlaneLocation.y + 10);
-	if (isWPressed) airPlaneLocation.SetPoint(airPlaneLocation.x, airPlaneLocation.y - 10);
-	if (isAPressed) airPlaneLocation.SetPoint(airPlaneLocation.x-10, airPlaneLocation.y);
-	if (isDPressed) airPlaneLocation.SetPoint(airPlaneLocation.x+10, airPlaneLocation.y);
-
-	CClientDC dc(this);
-	CDC MemDC;
-	MemDC.CreateCompatibleDC(&dc);
-	CBitmap bitmap;
-	bitmap.LoadBitmap(IDB_PLANE);
-	CBitmap* oldbitmap = MemDC.SelectObject(&bitmap);
-	
-    dc.BitBlt(airPlaneLocation.x,airPlaneLocation.y, 200, 200, &MemDC, 120, 120, SRCCOPY);
-		
-	dc.SelectObject(oldbitmap);
-	bitmap.DeleteObject();
-
-}
-
-
 void SinglePlayDialog::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) //키보드 방향키 WASD를 release할때 is*Pressed =  false 변경 
 {
-	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	switch (nChar) {
 	case 'S':
 	case 's':
@@ -146,7 +200,7 @@ void SinglePlayDialog::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) //키보�
 
 	case 'W':
 	case 'w':
-		isWPressed = false;		
+		isWPressed = false;
 		break;
 
 	case 'D':
@@ -154,6 +208,11 @@ void SinglePlayDialog::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) //키보�
 		isDPressed = false;
 		break;
 
-	CDialog::OnKeyUp(nChar, nRepCnt, nFlags);
-}
+	case 'J':
+	case 'j':
+		isJPressed = false;
+		break;
 
+		CDialog::OnKeyUp(nChar, nRepCnt, nFlags);
+	}
+}
