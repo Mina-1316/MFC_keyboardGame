@@ -84,13 +84,13 @@ void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent){
 
 		Invalidate(FALSE);
 		//비행기 움직임을 처리하는 메소드
-		void processAirplane();
+		processAirplane();
 		//탄의 움직임을 처리하는 메소드
-		void processBullet();
+		processBullet();
 		//장애물의 움직임을 처리하는 메소드
-		void processEnemy();
+		processEnemy();
 		//처리 완료 후, 화면을 그리는 메소드
-		void drawScene();
+		drawScene();
 		timertick++;
 		break;
 	}
@@ -108,8 +108,16 @@ void SinglePlayDialog::processAirplane() //비행기 그리는 메소드
 	if (isDPressed) airPlaneLocation.SetPoint(airPlaneLocation.x + planeSpeed, airPlaneLocation.y);
 }
 
-void processBullet() {
+void SinglePlayDialog::processBullet() {	//총알의 이동을 제어하는 메소드
 
+	//총알의 이동을 제어하는 람다식
+	//해당 클래스에 상수로 정의된 탄의 속도만큼 y축 위로 전진한다(-한다)
+	int bulletSpeed = this->bulletSpeed;
+	auto doBulletMove = [bulletSpeed](CPoint tgt) {
+		tgt.SetPoint(tgt.x, tgt.y - bulletSpeed);
+	};
+
+	std::for_each(bulletList.begin(), bulletList.end(), doBulletMove);
 }
 
 void SinglePlayDialog::processEnemy() {

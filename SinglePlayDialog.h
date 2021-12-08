@@ -33,8 +33,8 @@ private:
 
 	//-----var-----
 	//기존의 직접 만든 Single LinkedList에서 STL에서 지원하는 list로 교체
-	std::list<CPoint> bulletList;
-	std::list<Enemy> enemyList;
+	std::list<CPoint> bulletList;	//총알의 위치가 저장되는 배열
+	std::list<Enemy> enemyList;		//적의 위치와 이동벡터가 저장되는 배열
 
 	//난수 생성을 위한 생성자
 	std::mt19937 randEng;
