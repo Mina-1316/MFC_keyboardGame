@@ -14,7 +14,7 @@
 IMPLEMENT_DYNAMIC(SinglePlayDialog, CDialog)
 
 SinglePlayDialog::SinglePlayDialog(CWnd* pParent /*=nullptr*/)
-	: CDialog(IDD_DIALOG1, pParent)
+	: CDialog(IDD_SINGLEPLAY_DIALOG, pParent)
 {
 
 	
@@ -82,8 +82,6 @@ void SinglePlayDialog::OnPaint()
 void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent){
 	switch (nIDEvent) {
 	case 0:
-
-		Invalidate(FALSE);
 		//비행기 움직임을 처리하는 메소드
 		processAirplane();
 		//탄의 움직임을 처리하는 메소드
@@ -127,7 +125,8 @@ void SinglePlayDialog::processEnemy() {
 	std::uniform_int_distribution<int> vectorGen((-1)*maxEnemySpeed, maxEnemySpeed); // 적의 속도를 생성하는 난수
 	std::uniform_int_distribution<int> locationGen(10, dialogXSize - 10);	//적의 위치를 생성하는 난수
 
-	for (int i = 0; i < enemyGen(randEng); i++) 
+	int enemyGenNumber = enemyGen(randEng);
+	for (int i = 0; i < enemyGenNumber; i++) 
 	{
 		//무작위 위치에 적을 생성해서, enemyList에 넣음
 		enemyList.push_back(
@@ -169,7 +168,8 @@ void SinglePlayDialog::processEnemy() {
 
 void SinglePlayDialog::drawScene() //모든것을 그리는 메소드
 {
-	
+	Invalidate(true);
+
 	//비행기 그리기
 	CClientDC dc(this);
 	CDC MemDC;
@@ -177,7 +177,7 @@ void SinglePlayDialog::drawScene() //모든것을 그리는 메소드
 	CBitmap bitmap;
 	bitmap.LoadBitmap(IDB_PLANE);
 	CBitmap* oldbitmap = MemDC.SelectObject(&bitmap);
-			dc.BitBlt(airPlaneLocation.x, airPlaneLocation.y , 200, 200, &MemDC, 120, 120, SRCCOPY);
+	dc.BitBlt(airPlaneLocation.x, airPlaneLocation.y , 100, 90, &MemDC, 10, 10, SRCCOPY);
 	dc.SelectObject(oldbitmap);
 	bitmap.DeleteObject();
 
@@ -186,14 +186,14 @@ void SinglePlayDialog::drawScene() //모든것을 그리는 메소드
 	CBrush brush;
 	brush.CreateSolidBrush(RGB(255, 255, 255));
 	CBrush* oldbrush = dc.SelectObject(&brush);
-	for (auto enemy : enemyList) {
+	for (auto &enemy : enemyList) {
 		dc.Ellipse(enemy.point.x - enemySize, enemy.point.y - enemySize, enemy.point.x +enemySize, enemy.point.y+ enemySize ); // enemy.point.x , y가 중심점
 	}
 	dc.SelectObject(&oldbrush);
 	brush.DeleteObject();
 
 	//탄 그리기 필요
-
+	
 
 }
 
