@@ -219,7 +219,13 @@ void SinglePlayDialog::drawScene() //모든것을 그리는 메소드
 	brush.DeleteObject();
 
 	//탄 그리기 필요
-	
+	brush.CreateSolidBrush(RGB(255,0,0)); //빨간색 원의 반지름 4 => 탄
+	CBrush* oldbrush = dc.SelectObject(&brush);
+	for (auto bullet : bulletList) {
+		dc.Ellipse(bullet.x - bulletSize, bullet.y - bulletSize, bullet.x + bulletSize, bullet.y + bulletSize); // bullet.point.x , y가 중심점
+	}
+	dc.SelectObject(&oldbrush);
+	brush.DeleteObject();
 
 }
 
