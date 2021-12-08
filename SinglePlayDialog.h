@@ -21,8 +21,8 @@ private:
 	//----const-----
 	//시스템 사용
 	const int timerTick = 70; //Timer 틱 간격
-	const int dialogXSize = 1200; //창의 X축 크기
-	const int dialogYSize = 800; //창의 Y축 크기
+	const int dialogXSize = 1200; //창의 X축 크기1200
+	const int dialogYSize = 800; //창의 Y축 크기800
 
 	//매직넘버
 	const int enemySize = 8; //적의 반지름
