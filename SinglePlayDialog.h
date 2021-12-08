@@ -29,6 +29,7 @@ private:
 	const int maxEnemyGen = 2; //한번에 생성될 수 있는 적의 숫자
 	const int maxEnemySpeed = 5; //적의 최대 속도, y벡터는 음수값 불가능
 	const int bulletSpeed = 10; //총알의 속도
+	const int bulletSize = 4; //총알의 반지름(원)
 	const int planeSpeed = 6;
 
 	//-----var-----
