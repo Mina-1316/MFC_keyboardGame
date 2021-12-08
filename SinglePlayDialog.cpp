@@ -112,7 +112,7 @@ void SinglePlayDialog::processBullet() {	//총알의 이동을 제어하는 메�
 	//총알의 이동을 제어하는 람다식
 	//해당 클래스에 상수로 정의된 탄의 속도만큼 y축 위로 전진한다(-한다)
 	int bulletSpeed = this->bulletSpeed;
-	auto doBulletMove = [bulletSpeed](CPoint tgt) {
+	auto doBulletMove = [bulletSpeed](CPoint& tgt) {
 		tgt.SetPoint(tgt.x, tgt.y - bulletSpeed);
 	};
 
@@ -135,7 +135,7 @@ void SinglePlayDialog::processEnemy() {
 	}
 
 	//벡터만큼 움직이는 적을 구현하는 람다 표현식
-	auto doEnemyMove = [](Enemy tgt) 
+	auto doEnemyMove = [](Enemy& tgt) 
 	{
 		tgt.point.SetPoint(tgt.point.x + tgt.vector.x, tgt.point.y + tgt.vector.y); 
 	};
