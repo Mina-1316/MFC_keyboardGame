@@ -14,7 +14,7 @@
 IMPLEMENT_DYNAMIC(SinglePlayDialog, CDialog)
 
 SinglePlayDialog::SinglePlayDialog(CWnd* pParent /*=nullptr*/)
-	: CDialog(IDD_DIALOG1, pParent)
+	: CDialog(IDD_SINGLEPLAY_DIALOG, pParent)
 {
 
 	
@@ -76,22 +76,48 @@ void SinglePlayDialog::OnPaint()
 	CPaintDC dc(this); // device context for painting
 					   // TODO: 여기에 메시지 처리기 코드를 추가합니다.
 					   // 그리기 메시지에 대해서는 CDialog::OnPaint()을(를) 호출하지 마십시오.
+
+
+	//비행기 그리기
+	CClientDC cdc(this);
+	CDC MemDC;
+	MemDC.CreateCompatibleDC(&cdc);
+	CBitmap bitmap;
+	bitmap.LoadBitmap(IDB_PLANE);
+	CBitmap* oldbitmap = MemDC.SelectObject(&bitmap);
+	cdc.BitBlt(airPlaneLocation.x, airPlaneLocation.y, 100, 90, &MemDC, 10, 10, SRCCOPY);
+	cdc.SelectObject(oldbitmap);
+	bitmap.DeleteObject();
+
+	//원 그리기 , brush 사용
+	CBrush brush;
+	brush.CreateSolidBrush(RGB(255, 255, 255));
+	CBrush* oldbrush = cdc.SelectObject(&brush);
+	for (auto& enemy : enemyList) {
+		cdc.Ellipse(enemy.point.x - enemySize, enemy.point.y - enemySize, enemy.point.x + enemySize, enemy.point.y + enemySize); // enemy.point.x , y가 중심점
+	}
+	cdc.SelectObject(&oldbrush);
+	brush.DeleteObject();
+
+	//탄 그리기 필요
+
+
+
 	
 }
 
 void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent){
 	switch (nIDEvent) {
 	case 0:
-
-		Invalidate(FALSE);
 		//비행기 움직임을 처리하는 메소드
-		void processAirplane();
+		processAirplane();
 		//탄의 움직임을 처리하는 메소드
-		void processBullet();
+		processBullet();
 		//장애물의 움직임을 처리하는 메소드
-		void processEnemy();
+		processEnemy();
 		//처리 완료 후, 화면을 그리는 메소드
-		void drawScene();
+		//drawScene();
+		Invalidate(TRUE);
 		timertick++;
 		break;
 	}
@@ -109,8 +135,16 @@ void SinglePlayDialog::processAirplane() //비행기 그리는 메소드
 	if (isDPressed) airPlaneLocation.SetPoint(airPlaneLocation.x + planeSpeed, airPlaneLocation.y);
 }
 
-void processBullet() {
+void SinglePlayDialog::processBullet() {	//총알의 이동을 제어하는 메소드
 
+	//총알의 이동을 제어하는 람다식
+	//해당 클래스에 상수로 정의된 탄의 속도만큼 y축 위로 전진한다(-한다)
+	int bulletSpeed = this->bulletSpeed;
+	auto doBulletMove = [bulletSpeed](CPoint& tgt) {
+		tgt.SetPoint(tgt.x, tgt.y - bulletSpeed);
+	};
+
+	std::for_each(bulletList.begin(), bulletList.end(), doBulletMove);
 }
 
 void SinglePlayDialog::processEnemy() {
@@ -119,7 +153,8 @@ void SinglePlayDialog::processEnemy() {
 	std::uniform_int_distribution<int> vectorGen((-1)*maxEnemySpeed, maxEnemySpeed); // 적의 속도를 생성하는 난수
 	std::uniform_int_distribution<int> locationGen(10, dialogXSize - 10);	//적의 위치를 생성하는 난수
 
-	for (int i = 0; i < enemyGen(randEng); i++) 
+	int enemyGenNumber = enemyGen(randEng);
+	for (int i = 0; i < enemyGenNumber; i++) 
 	{
 		//무작위 위치에 적을 생성해서, enemyList에 넣음
 		enemyList.push_back(
@@ -128,13 +163,13 @@ void SinglePlayDialog::processEnemy() {
 	}
 
 	//벡터만큼 움직이는 적을 구현하는 람다 표현식
-	auto doEnemyMove = [](Enemy tgt) 
+	auto doEnemyMove = [](Enemy& tgt) 
 	{
 		tgt.point.SetPoint(tgt.point.x + tgt.vector.x, tgt.point.y + tgt.vector.y); 
 	};
 	std::for_each(enemyList.begin(), enemyList.end(), doEnemyMove);
 
-	//화면 밖으로 벗어난 적을 삭제하는 람다 표현식
+	//탄에 맞은 적을 삭제하는 람다 표현식
 	const int enemySize = this->enemySize;
 	for (auto bullet : bulletList) {
 		//(x좌표차^2)+(y좌표차^2)가 실제 원 반지름 안쪽에 있는 경우, true를 반환하는 람다식
@@ -145,11 +180,23 @@ void SinglePlayDialog::processEnemy() {
 		//checkDist 람다식을 기반으로, 일정 범위 안에 들어올 경우, 데이터를 삭제시킨다.
 		std::remove_if(enemyList.begin(), enemyList.end(), checkDist);
 	}
+
+	//밖으로 나간 적을 삭제하는 람다 표현식
+	const int dialogXSize = this->dialogXSize;
+	const int dialogYSize = this->dialogYSize;
+	auto deleteOutsideEnemy = [enemySize, dialogXSize, dialogYSize](Enemy tgt) {
+			//x축 밖에 나갔는지 검사
+		return (tgt.point.x<0-enemySize||tgt.point.x>dialogXSize+enemySize||
+			//y축 아래로 내려갔는지 검사
+			tgt.point.y>dialogYSize+enemySize)?	true : false;
+	};
+	//x축 좌/우 또는 y축 아래로 나간 것이 감지될 경우, 적을 삭제시킨다.
+	std::remove_if(enemyList.begin(), enemyList.end(), deleteOutsideEnemy);
 }
 
 void SinglePlayDialog::drawScene() //모든것을 그리는 메소드
 {
-	
+
 	//비행기 그리기
 	CClientDC dc(this);
 	CDC MemDC;
@@ -157,16 +204,15 @@ void SinglePlayDialog::drawScene() //모든것을 그리는 메소드
 	CBitmap bitmap;
 	bitmap.LoadBitmap(IDB_PLANE);
 	CBitmap* oldbitmap = MemDC.SelectObject(&bitmap);
-			dc.BitBlt(airPlaneLocation.x, airPlaneLocation.y , 200, 200, &MemDC, 120, 120, SRCCOPY);
+	dc.BitBlt(airPlaneLocation.x, airPlaneLocation.y , 100, 90, &MemDC, 10, 10, SRCCOPY);
 	dc.SelectObject(oldbitmap);
 	bitmap.DeleteObject();
-
 
 	//원 그리기 , brush 사용
 	CBrush brush;
 	brush.CreateSolidBrush(RGB(255, 255, 255));
 	CBrush* oldbrush = dc.SelectObject(&brush);
-	for (auto enemy : enemyList) {
+	for (auto &enemy : enemyList) {
 		dc.Ellipse(enemy.point.x - enemySize, enemy.point.y - enemySize, enemy.point.x +enemySize, enemy.point.y+ enemySize ); // enemy.point.x , y가 중심점
 	}
 	dc.SelectObject(&oldbrush);
