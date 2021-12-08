@@ -53,6 +53,7 @@ BOOL SinglePlayDialog::OnInitDialog() //비행기 비트맵을 LOAD하는걸 잘
 	airPlaneLocation.x = 600;
 	airPlaneLocation.y = 720;
 
+
 	std::random_device randDev;
 	randEng.seed(randDev());
 
@@ -102,8 +103,15 @@ void SinglePlayDialog::OnPaint()
 	brush.DeleteObject();
 
 	//탄 그리기 필요
-
-
+	
+		brush.CreateSolidBrush(RGB(255, 0, 0)); //빨간색 원의 반지름 4 => 탄
+		oldbrush = dc.SelectObject(&brush); //oldbrush 변수 중첩 수정
+		for (auto bullet : bulletList) {
+			dc.Ellipse(bullet.x - bulletSize, bullet.y - bulletSize, bullet.x + bulletSize, bullet.y + bulletSize); // bullet.point.x , y가 중심점
+		}
+		dc.SelectObject(&oldbrush);
+		brush.DeleteObject();
+	
 
 	
 }
@@ -141,6 +149,7 @@ void SinglePlayDialog::processBullet() {	//총알의 이동을 제어하는 메�
 	
 	//총알의 이동을 제어하는 람다식
 	//해당 클래스에 상수로 정의된 탄의 속도만큼 y축 위로 전진한다(-한다)
+
 	int bulletSpeed = this->bulletSpeed;
 	auto doBulletMove = [bulletSpeed](CPoint& tgt) {
 		tgt.SetPoint(tgt.x, tgt.y - bulletSpeed);
@@ -203,7 +212,7 @@ void SinglePlayDialog::processEnemy() {
 void SinglePlayDialog::drawScene() //모든것을 그리는 메소드
 {
 
-	//비행기 그리기
+/*	//비행기 그리기
 	CClientDC dc(this);
 	CDC MemDC;
 	MemDC.CreateCompatibleDC(&dc);
@@ -232,7 +241,7 @@ void SinglePlayDialog::drawScene() //모든것을 그리는 메소드
 	}
 	dc.SelectObject(&oldbrush);
 	brush.DeleteObject();
-
+	*/
 }
 
 void SinglePlayDialog::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) //키보드 방향키 WASD를 각각 아래로 눌렀을때 is*Pressed true 변경 , 각각 10정도 이동
@@ -260,7 +269,7 @@ void SinglePlayDialog::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) //키보
 
 	case 'J':
 	case 'j':
-		isJPressed = false;
+		isJPressed = true; //눌렀을때 true
 		break;
 
 	}
