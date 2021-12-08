@@ -76,6 +76,7 @@ void SinglePlayDialog::OnPaint()
 	CPaintDC dc(this); // device context for painting
 					   // TODO: 여기에 메시지 처리기 코드를 추가합니다.
 					   // 그리기 메시지에 대해서는 CDialog::OnPaint()을(를) 호출하지 마십시오.
+	
 }
 
 void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent){
@@ -146,8 +147,33 @@ void SinglePlayDialog::processEnemy() {
 	}
 }
 
-void drawScene() 
+void SinglePlayDialog::drawScene() //모든것을 그리는 메소드
 {
+	
+	//비행기 그리기
+	CClientDC dc(this);
+	CDC MemDC;
+	MemDC.CreateCompatibleDC(&dc);
+	CBitmap bitmap;
+	bitmap.LoadBitmap(IDB_PLANE);
+	CBitmap* oldbitmap = MemDC.SelectObject(&bitmap);
+			dc.BitBlt(airPlaneLocation.x, airPlaneLocation.y , 200, 200, &MemDC, 120, 120, SRCCOPY);
+	dc.SelectObject(oldbitmap);
+	bitmap.DeleteObject();
+
+
+	//원 그리기 , brush 사용
+	CBrush brush;
+	brush.CreateSolidBrush(RGB(255, 255, 255));
+	CBrush* oldbrush = dc.SelectObject(&brush);
+	for (auto enemy : enemyList) {
+		dc.Ellipse(enemy.point.x - enemySize, enemy.point.y - enemySize, enemy.point.x +enemySize, enemy.point.y+ enemySize ); // enemy.point.x , y가 중심점
+	}
+	dc.SelectObject(&oldbrush);
+	brush.DeleteObject();
+
+	//탄 그리기 필요
+
 
 }
 
