@@ -185,12 +185,10 @@ void SinglePlayDialog::processBullet() {	//총알의 이동을 제어하는 메�
 
 
 	//총알이 맵 밖에 나갈 경우 제거하는 람다식
-	const int bulletSize = this->bulletSize;
-	const int dialogXSize = this->dialogXSize;
 	const int dialogYSize = this->dialogYSize;
-	auto deleteOutsideBullet = [bulletSize, dialogXSize, dialogYSize](CPoint tgt) {
-		//Y축 밖에 나갔는지 검사 , 현재 X축은 지정된 범위이상 넘어가지 않으므로 신경 안써도 괜찮다. , Y축에서 0보다 작아질때 탄의 메모리를 삭제한다.
-		return (tgt.y < 0) ? true : false;
+	auto deleteOutsideBullet = [dialogYSize](CPoint tgt) {
+		//Y축 밖에 나갔는지 검사 , 현재 X축은 지정된 범위이상 넘어가지 않으므로 신경 안써도 괜찮다. , Y축에서 -10보다 작아질때 탄의 메모리를 삭제한다.
+		return (tgt.y < -10) ? true : false;
 	};
 	//x축 좌/우 또는 y축 아래로 나간 것이 감지될 경우, 탄을 삭제시킨다.
 	std::remove_if(bulletList.begin(), bulletList.end(), deleteOutsideBullet);
