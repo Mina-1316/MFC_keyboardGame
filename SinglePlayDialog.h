@@ -52,8 +52,8 @@ private:
 	void processEnemy();
 	//탄의 움직임을 처리하는 메소드
 	void processBullet();
-	//처리 완료 후, 화면을 그리는 메소드
-	void drawScene();
+	// drawScene() 메소드 지웠습니다.
+	
 	
 
 public:
