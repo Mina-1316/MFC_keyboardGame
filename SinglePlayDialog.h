@@ -52,7 +52,9 @@ private:
 	void processEnemy();
 	//탄의 움직임을 처리하는 메소드
 	void processBullet();
-	// drawScene() 메소드 지웠습니다.
+	// drawScene() 메소드 지웠습니다
+	//일정시간이 지나가면 종료
+	void after100secExit();
 	
 	
 

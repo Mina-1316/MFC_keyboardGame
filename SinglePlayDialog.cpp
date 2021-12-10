@@ -191,6 +191,12 @@ void SinglePlayDialog::processBullet() {	//총알의 이동을 제어하는 메�
 	std::remove_if(bulletList.begin(), bulletList.end(), deleteOutsideBullet);
 }
 
+void SinglePlayDialog::after100secExit()
+{
+}
+
+
+
 void SinglePlayDialog::processEnemy() {
 	//적을 생성하는 부분
 	std::uniform_int_distribution<int> enemyGen(0, maxEnemyGen);	//생성하는 적 숫자를 설정하는 난수
