@@ -149,8 +149,8 @@ void SinglePlayDialog::processAirplane() //비행기 그리는 메소드
 
 	//비행기가 맵 안에서만 움직이도록 구현 - 추가(수정) 필요
 	if (airPlaneLocation.x > dialogXSize - airplaneXSize) airPlaneLocation.SetPoint(airPlaneLocation.x - planeSpeed, airPlaneLocation.y);
-	if (airPlaneLocation.y > dialogYSize - 62) airPlaneLocation.SetPoint(airPlaneLocation.x, airPlaneLocation.y - planeSpeed); //dialogYSize - 62, 62대신 airplaneYSize 했는데 원하는 모양이 안나와서 임의로 설정했음
-	
+	if (airPlaneLocation.y > dialogYSize - airplaneYSize*3/2) airPlaneLocation.SetPoint(airPlaneLocation.x, airPlaneLocation.y - planeSpeed); //dialogYSize - 62, 62대신 airplaneYSize 했는데 원하는 모양이 안나와서 임의로 설정했음
+	// airplaneYSize*3/2 --> 이 숫자는 화면 밖으로 안 나가게 하는 숫자 입니다.
 		
 	
 	//적을 맞았을때 비행기 최종 점수가 까인다?? - 추가 필요
