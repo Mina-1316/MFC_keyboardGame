@@ -106,14 +106,14 @@ void SinglePlayDialog::OnPaint()
 
 	//탄 그리기 필요
 	    
-		brush.CreateSolidBrush(RGB(255, 0, 0)); //빨간색 원의 반지름 4 => 탄
-		 oldbrush = dc.SelectObject(&brush); //oldbrush 변수 중첩 수정
-		for (auto bullet : bulletList) {
-			dc.Ellipse(bullet.x - bulletSize, bullet.y - bulletSize, bullet.x + bulletSize, bullet.y + bulletSize); // bullet.point.x , y가 중심점
-			
-		}
-		dc.SelectObject(&oldbrush);
-		brush.DeleteObject();
+	brush.CreateSolidBrush(RGB(255, 0, 0)); //빨간색 원의 반지름 4 => 탄
+	oldbrush = dc.SelectObject(&brush); //oldbrush 변수 중첩 수정
+	for (auto bullet : bulletList) {
+		dc.Ellipse(bullet.x - bulletSize, bullet.y - bulletSize, bullet.x + bulletSize, bullet.y + bulletSize); // bullet.point.x , y가 중심점
+
+	}
+	dc.SelectObject(&oldbrush);
+	brush.DeleteObject();
 
 	
 	
@@ -170,13 +170,18 @@ void SinglePlayDialog::processBullet() {	//총알의 이동을 제어하는 메�
 
 
 	//J버튼을 누르면 총알이 날아가는 코드
-	if (isJPressed)
+	if (isJPressed&&bulletTimer<=0)
 	{
 		//J를 누르는 순간의 비행기 좌표를 탄의 초기 좌표로 입력
 		//좌표값을 doBulletMove의 인자로 넘겨준다
 		bulletList.push_back(
 			(CPoint(airPlaneLocation.x, airPlaneLocation.y)));
-    }
+
+		bulletTimer = bulletFireRate;
+	}
+	else {
+		bulletTimer--;
+	}
 
 
 	//총알이 맵 밖에 나갈 경우 제거하는 람다식
