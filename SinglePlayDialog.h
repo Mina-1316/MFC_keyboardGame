@@ -36,6 +36,8 @@ private:
 
 	const int bulletFireRate = 6; //총알의 발사 term
 
+	const int plusScore = 5; //탄으로 적을 맞췄을때 5점의 점수 증가값 설정
+
 	//-----var-----
 	//기존의 직접 만든 Single LinkedList에서 STL에서 지원하는 list로 교체
 	std::list<CPoint> bulletList;	//총알의 위치가 저장되는 배열
@@ -44,7 +46,7 @@ private:
 	//난수 생성을 위한 생성자
 	std::mt19937 randEng;
 
-	int timertick = 0;		//시간이 얼마나 지났는지를 체크하는 변수
+	int timerCount = 0;		//시간이 얼마나 지났는지를 체크하는 변수
 	int score = 0;			//점수
 
 	int bulletTimer = 0;	//탄의 연사 속도를 조절하는 타이머
@@ -66,7 +68,7 @@ private:
 	void processBullet();
 	// drawScene() 메소드 지웠습니다
 	//일정시간이 지나가면 종료
-	void after100secExit();
+	void after3minsExit();
 	
 	
 

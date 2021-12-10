@@ -131,7 +131,8 @@ void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent){
 		//처리 완료 후, 화면을 그리는 메소드
 		
 		Invalidate(TRUE);
-		timertick++;
+		timerCount++;
+		after3minsExit(); //100초가 지나가면 종료하는 메소드 추가
 		break;
 	}
 
@@ -153,7 +154,13 @@ void SinglePlayDialog::processAirplane() //비행기 그리는 메소드
 	// airplaneYSize*3/2 --> 이 숫자는 화면 밖으로 안 나가게 하는 숫자 입니다.
 		
 	
-	//적을 맞았을때 비행기 최종 점수가 까인다?? - 추가 필요
+	//비행기가 적과 충돌시 종료 된다. - 추가 필요
+	for (auto& enemy : enemyList) {
+		if (pow(enemy.point.x - (airPlaneLocation.x+20),2) + pow(enemy.point.y - (airPlaneLocation.y+19), 2) < pow(30, 2)) //탄의 중심점과 비행기 비트맵의 정중앙 위치의 좌표가 20안에 있으면 종료된다.
+		{
+			OnOK(); //OnOK()자리에 점수가 나오는 팝업창이 띄워져야 한다.
+		}
+	}
 
 
 }
@@ -196,8 +203,9 @@ void SinglePlayDialog::processBullet() {	//총알의 이동을 제어하는 메�
 	std::remove_if(bulletList.begin(), bulletList.end(), deleteOutsideBullet);
 }
 
-void SinglePlayDialog::after100secExit()
+void SinglePlayDialog::after3minsExit()
 {
+	if (timerCount > 2571) OnOK(); //OnOK()자리에 팝업 창이 나오면서 현재 얻는 점수가 출력이 되는 메소드를 넣고 그 메소드 맨마지막에 OnOK()를 넣으면 된다.
 }
 
 
@@ -226,12 +234,16 @@ void SinglePlayDialog::processEnemy() {
 
 	//탄에 맞은 적을 삭제하는 람다 표현식
 	const int enemySize = this->enemySize;
+	const int plusScore = this->plusScore;
 	for (auto bullet : bulletList) {
 		//(x좌표차^2)+(y좌표차^2)가 실제 원 반지름 안쪽에 있는 경우, true를 반환하는 람다식
 		auto checkDist = [bullet, enemySize](Enemy tgt) {
 			return (pow(bullet.x - tgt.point.x, 2) + pow(bullet.y - tgt.point.y, 2)) < pow(enemySize, 2) ?
 				true : false;
 		};
+
+		
+
 		//checkDist 람다식을 기반으로, 일정 범위 안에 들어올 경우, 데이터를 삭제시킨다.
 		std::remove_if(enemyList.begin(), enemyList.end(), checkDist);
 	}
