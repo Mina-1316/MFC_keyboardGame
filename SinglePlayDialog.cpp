@@ -131,7 +131,7 @@ void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent){
 		//처리 완료 후, 화면을 그리는 메소드
 		
 		Invalidate(TRUE);
-		timertick++;
+		timerCount++;
 		break;
 	}
 

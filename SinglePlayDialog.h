@@ -44,7 +44,7 @@ private:
 	//난수 생성을 위한 생성자
 	std::mt19937 randEng;
 
-	int timertick = 0;		//시간이 얼마나 지났는지를 체크하는 변수
+	int timerCount = 0;		//시간이 얼마나 지났는지를 체크하는 변수
 	int score = 0;			//점수
 
 	int bulletTimer = 0;	//탄의 연사 속도를 조절하는 타이머
