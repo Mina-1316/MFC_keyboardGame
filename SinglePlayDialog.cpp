@@ -220,13 +220,18 @@ void SinglePlayDialog::processEnemy() {
 
 	//탄에 맞은 적을 삭제하는 람다 표현식
 	const int enemySize = this->enemySize;
+	const int enemyHitScore = this->enemyHitScore;
+	int* score = &this->score;
 	for (auto bullet : bulletList) {
 		//(x좌표차^2)+(y좌표차^2)가 실제 원 반지름 안쪽에 있는 경우, true를 반환하는 람다식
-		auto checkDist = [bullet, enemySize](Enemy tgt) {
+		auto checkDist = [bullet, enemySize, enemyHitScore, score](Enemy tgt) {
 			if ((pow(bullet.x - tgt.point.x, 2) + pow(bullet.y - tgt.point.y, 2)) < pow(enemySize, 2)) {
+				//만약 맞았을 경우, 점수를 추가하고, 해당 적을 제거함
+				*score += enemyHitScore;
 				return true;
 			}
-			
+			else {
+				return false;}			
 		};
 		//checkDist 람다식을 기반으로, 일정 범위 안에 들어올 경우, 데이터를 삭제시킨다.
 		std::remove_if(enemyList.begin(), enemyList.end(), checkDist);
