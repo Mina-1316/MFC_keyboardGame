@@ -34,6 +34,8 @@ private:
 	const int airplaneXSize = 40; //비행기의 가로 크기
 	const int airplaneYSize = 38; //비행기의 세로 크기
 
+	const int bulletFireRate = 6; //총알의 발사 term
+
 	//-----var-----
 	//기존의 직접 만든 Single LinkedList에서 STL에서 지원하는 list로 교체
 	std::list<CPoint> bulletList;	//총알의 위치가 저장되는 배열
@@ -44,6 +46,16 @@ private:
 
 	int timertick = 0;		//시간이 얼마나 지났는지를 체크하는 변수
 	int score = 0;			//점수
+
+	int bulletTimer = 0;	//탄의 연사 속도를 조절하는 타이머
+
+	//각각의 버튼 눌렀을때의 true,false 눌렀을때 true , 때면 false
+	bool isWPressed = false;
+	bool isAPressed = false;
+	bool isSPressed = false;
+	bool isDPressed = false;
+	bool isJPressed = false;
+
 
 	//-----Methods-----
 	//비행기 움직임을 처리하는 메소드
@@ -75,13 +87,6 @@ public:
 	
 	virtual BOOL OnInitDialog();
 	
-     //각각의 버튼 눌렀을때의 true,false 눌렀을때 true , 때면 false
-	bool isWPressed=false;
-	bool isAPressed=false;
-	bool isSPressed=false;
-	bool isDPressed=false;
-	bool isJPressed=false;
-
 	CPoint airPlaneLocation; //비행기의 위치 CPoint로 생성
 	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
