@@ -7,10 +7,19 @@ class LeaderboardDialog : public CDialog
 {
 	DECLARE_DYNAMIC(LeaderboardDialog)
 
+
+	//-----상수-----
+private:
+	
+
+
 	//-----변수-----
 private:
+	
 
-
+	//-----멤버 함수-----
+private:
+	
 
 public:
 	LeaderboardDialog(CWnd* pParent = nullptr);   // 표준 생성자입니다.
