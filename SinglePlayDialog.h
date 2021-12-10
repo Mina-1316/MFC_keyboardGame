@@ -35,6 +35,7 @@ private:
 	const int airplaneYSize = 38; //비행기의 세로 크기
 
 	const int bulletFireRate = 6; //총알의 발사 term
+	const int enemyHitScore = 300; //적을 적중 시 증가하는 점수
 
 	//-----var-----
 	//기존의 직접 만든 Single LinkedList에서 STL에서 지원하는 list로 교체
