@@ -6,7 +6,7 @@
 #include "SinglePlayDialog.h" //싱글 플레이 버튼을 눌렀을때 뜨는 창을 SinglePlayDialog으로 변경했음.
 #include "afxdialogex.h"
 #include "Resource.h"
-
+#include "SendScoreDialog.h" //SinglePlayDialog에 SendScoreDialog.h 파일 추가했다.
 
 
 // SinglePlayDialog 대화 상자
@@ -132,7 +132,7 @@ void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent){
 		
 		Invalidate(TRUE);
 		timerCount++;
-		after3minsExit(); //100초가 지나가면 종료하는 메소드 추가
+		exitDialog(); //100초가 지나가면 종료하는 메소드 추가
 		break;
 	}
 
@@ -158,8 +158,15 @@ void SinglePlayDialog::processAirplane() //비행기 그리는 메소드
 	for (auto& enemy : enemyList) {
 		if (pow(enemy.point.x - (airPlaneLocation.x+20),2) + pow(enemy.point.y - (airPlaneLocation.y+19), 2) < pow(30, 2)) //탄의 중심점과 비행기 비트맵의 정중앙 위치의 좌표가 20안에 있으면 종료된다.
 		{
-			OnOK(); //OnOK()자리에 점수가 나오는 팝업창이 띄워져야 한다.
+			SendScoreDialog SendScoreDialog;   //SendScoreDialog 클래스를 SendScoreDialog로 선언
+			UpdateData(TRUE);
+			KillTimer(0);
+			SendScoreDialog.DoModal();
+			OnOK();
+			UpdateData(FALSE);
 		}
+
+	
 	}
 
 
@@ -203,9 +210,19 @@ void SinglePlayDialog::processBullet() {	//총알의 이동을 제어하는 메�
 	std::remove_if(bulletList.begin(), bulletList.end(), deleteOutsideBullet);
 }
 
-void SinglePlayDialog::after3minsExit()
+void SinglePlayDialog::exitDialog()
 {
-	if (timerCount > 2571) OnOK(); //OnOK()자리에 팝업 창이 나오면서 현재 얻는 점수가 출력이 되는 메소드를 넣고 그 메소드 맨마지막에 OnOK()를 넣으면 된다.
+	const int last3mins = this->last3mins; //last3mins를 const로 생성한 후 상수로 작동하도록 하였습니다.
+	if (timerCount > last3mins) //OnOK()자리에 팝업 창이 나오면서 현재 얻는 점수가 출력이 되는 메소드를 넣고 그 메소드 맨마지막에 OnOK()를 넣으면 된다.
+	{
+		SendScoreDialog SendScoreDialog;   //SendScoreDialog 클래스를 SendScoreDialog로 선언
+		UpdateData(TRUE);
+		KillTimer(0);
+	    SendScoreDialog.DoModal();            //모달 창 나오고 확인 누르면 메뉴창까지 나간다.
+		OnOK();
+		UpdateData(FALSE);
+	}
+
 }
 
 
