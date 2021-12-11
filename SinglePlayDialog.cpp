@@ -132,10 +132,9 @@ void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent){
 		
 		Invalidate(TRUE);
 		timerCount++;
-		if (timerCount > maxTime) //OnOK()자리에 팝업 창이 나오면서 현재 얻는 점수가 출력이 되는 메소드를 넣고 그 메소드 맨마지막에 OnOK()를 넣으면 된다.
-		{
-			exitDialog();
-		}
+
+		exitDialog(); //100초가 지나가면 종료하는 메소드 추가
+
 		break;
 	}
 
@@ -161,9 +160,15 @@ void SinglePlayDialog::processAirplane() //비행기 그리는 메소드
 	for (auto& enemy : enemyList) {
 		if (pow(enemy.point.x - (airPlaneLocation.x+20),2) + pow(enemy.point.y - (airPlaneLocation.y+19), 2) < pow(30, 2)) //탄의 중심점과 비행기 비트맵의 정중앙 위치의 좌표가 20안에 있으면 종료된다.
 		{
-			exitDialog();
+			SendScoreDialog SendScoreDialog;   //SendScoreDialog 클래스를 SendScoreDialog로 선언
+			UpdateData(TRUE);
+			KillTimer(0);
+			SendScoreDialog.DoModal();
+			OnOK();
+			UpdateData(FALSE);
 		}
 
+	
 	}
 
 
@@ -207,18 +212,19 @@ void SinglePlayDialog::processBullet() {	//총알의 이동을 제어하는 메�
 
 void SinglePlayDialog::exitDialog()
 {
-	
-	KillTimer(0);
-	score += timerTick * timeScoreMultiply;
-	SendScoreDialog SendScoreDialog;   //SendScoreDialog 클래스를 SendScoreDialog로 선언
-	UpdateData(TRUE);
-	SendScoreDialog.m_score = score;
-	SendScoreDialog.DoModal();            //모달 창 나오고 확인 누르면 메뉴창까지 나간다.
-	UpdateData(FALSE);
-	OnOK();
-	
+	const int last3mins = this->maxTime; //last3mins를 const로 생성한 후 상수로 작동하도록 하였습니다.
+	if (timerCount > last3mins) //OnOK()자리에 팝업 창이 나오면서 현재 얻는 점수가 출력이 되는 메소드를 넣고 그 메소드 맨마지막에 OnOK()를 넣으면 된다.
+	{
+		SendScoreDialog SendScoreDialog;   //SendScoreDialog 클래스를 SendScoreDialog로 선언
+		UpdateData(TRUE);
+		KillTimer(0);
+	    SendScoreDialog.DoModal();            //모달 창 나오고 확인 누르면 메뉴창까지 나간다.
+		OnOK();
+		UpdateData(FALSE);
+	}
 
 }
+
 
 
 void SinglePlayDialog::processEnemy() {
@@ -278,6 +284,8 @@ void SinglePlayDialog::processEnemy() {
 	//x축 좌/우 또는 y축 아래로 나간 것이 감지될 경우, 적을 삭제시킨다.
 	std::remove_if(enemyList.begin(), enemyList.end(), deleteOutsideEnemy);
 }
+
+// 더 이상 필요없는 drawScene() 지웠습니다.
 
 void SinglePlayDialog::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) //키보드 방향키 WASD를 각각 아래로 눌렀을때 is*Pressed true 변경 , 각각 10정도 이동
 {
