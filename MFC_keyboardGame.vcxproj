@@ -18,6 +18,34 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="HttpConnClass.h" />
+    <ClInclude Include="LeaderboardDialog.h" />
+    <ClInclude Include="MFC_keyboardGame.h" />
+    <ClInclude Include="MFC_keyboardGameDlg.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="SendScoreDialog.h" />
+    <ClInclude Include="SinglePlayDialog.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="HttpConnClass.cpp" />
+    <ClCompile Include="LeaderboardDialog.cpp" />
+    <ClCompile Include="MFC_keyboardGame.cpp" />
+    <ClCompile Include="MFC_keyboardGameDlg.cpp" />
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="SendScoreDialog.cpp" />
+    <ClCompile Include="SinglePlayDialog.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\MFC_keyboardGame.ico" />
+    <Image Include="res\plane.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MFCkeyboardGame.rc" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{589E1A8F-48C2-4BFC-A4B6-56743FD4F7D1}</ProjectGuid>
@@ -88,7 +116,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
