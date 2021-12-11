@@ -14,7 +14,7 @@ IMPLEMENT_DYNAMIC(SendScoreDialog, CDialogEx)
 SendScoreDialog::SendScoreDialog(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_SendScore_DIALOG, pParent)
 	
-	, m_score(0)
+	
 	, m_userID(_T(""))
 {
 

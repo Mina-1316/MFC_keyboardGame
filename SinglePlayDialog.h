@@ -38,7 +38,7 @@ private:
 
 	const int plusScore = 5; //탄으로 적을 맞췄을때 5점의 점수 증가값 설정
 
-	const int last3mins = 2571; //last3mins를 const로 생성한 후 상수로 작동하도록 하였습니다.
+	const int maxTime = 2571; //last3mins를 const로 생성한 후 상수로 작동하도록 하였습니다.
 
 	//-----var-----
 	//기존의 직접 만든 Single LinkedList에서 STL에서 지원하는 list로 교체

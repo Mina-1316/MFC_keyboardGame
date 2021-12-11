@@ -1,6 +1,8 @@
 ﻿#pragma once
 
 
+
+
 // SendScoreDialog 대화 상자
 
 class SendScoreDialog : public CDialogEx
@@ -22,7 +24,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 //	CString m_score;
-	int m_score;
-	CString m_userID;
+	int m_score = 0; // SendScoreDialog.cpp에 있는   , m_score(0)를 지우고 0으로 초기화 했습니다.
+	std::string m_userID; //CString에서 std::string으로 변경
 	afx_msg void OnBnClickedOk();
 };

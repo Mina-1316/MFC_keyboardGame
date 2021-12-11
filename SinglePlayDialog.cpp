@@ -212,7 +212,7 @@ void SinglePlayDialog::processBullet() {	//총알의 이동을 제어하는 메�
 
 void SinglePlayDialog::exitDialog()
 {
-	const int last3mins = this->last3mins; //last3mins를 const로 생성한 후 상수로 작동하도록 하였습니다.
+	const int last3mins = this->maxTime; //last3mins를 const로 생성한 후 상수로 작동하도록 하였습니다.
 	if (timerCount > last3mins) //OnOK()자리에 팝업 창이 나오면서 현재 얻는 점수가 출력이 되는 메소드를 넣고 그 메소드 맨마지막에 OnOK()를 넣으면 된다.
 	{
 		SendScoreDialog SendScoreDialog;   //SendScoreDialog 클래스를 SendScoreDialog로 선언
