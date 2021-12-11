@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-
+#include <string>
 
 
 // SendScoreDialog 대화 상자
@@ -25,6 +25,6 @@ protected:
 public:
 //	CString m_score;
 	int m_score = 0; // SendScoreDialog.cpp에 있는   , m_score(0)를 지우고 0으로 초기화 했습니다.
-	std::string m_userID; //CString에서 std::string으로 변경
+	CString m_userID; //에러 발생, 다시 CString으로 변경, 출력만 std::string으로 하기
 	afx_msg void OnBnClickedOk();
 };
