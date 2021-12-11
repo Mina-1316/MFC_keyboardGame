@@ -5,6 +5,7 @@
 #include "MFC_keyboardGame.h"
 #include "SinglePlayDialog.h" //싱글 플레이 버튼을 눌렀을때 뜨는 창을 SinglePlayDialog으로 변경했음.
 #include "afxdialogex.h"
+#include "Resource.h"
 
 
 // SinglePlayDialog 대화 상자
@@ -15,8 +16,7 @@ SinglePlayDialog::SinglePlayDialog(CWnd* pParent /*=nullptr*/)
 	: CDialog(IDD_DIALOG1, pParent)
 {
 
-	airplane_X = 0;
-	airplane_Y = 0;
+	
 }
 
 SinglePlayDialog::~SinglePlayDialog()
@@ -32,6 +32,8 @@ void SinglePlayDialog::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(SinglePlayDialog, CDialog)
 	ON_WM_PAINT()
 	ON_WM_KEYDOWN()
+	ON_WM_KEYUP()
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -43,8 +45,8 @@ BOOL SinglePlayDialog::OnInitDialog() //비행기 비트맵을 LOAD하는걸 잘
 {
 	CDialog::OnInitDialog();
 
-	airplane_X = 300;
-	airplane_Y = 300;
+	airPlaneLocation.x = 100;
+	airPlaneLocation.y = 100;
 
 
 	return TRUE;  // return TRUE unless you set the focus to a control
@@ -54,35 +56,100 @@ BOOL SinglePlayDialog::OnInitDialog() //비행기 비트맵을 LOAD하는걸 잘
 
 void SinglePlayDialog::OnPaint()  //싱글 게임 실행시SinglePlayDialog에 비행기 TEXT문자를 그리기 위해서 추가했다.
 {
-	CPaintDC dc(this);
-	dc.TextOutW(airplane_X, airplane_Y, _T("비행기 그림")); //X,Y좌표에 원래는 비트맵을 나타내야 하지만 현재 비트맵을 LOAD하는 방법을 모르겠다.
+	
 }
 
 
-void SinglePlayDialog::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) //키보드 방향키 WASD를 각각 아래로 눌렀을때 비행기가 움직이기 위해서 추가했다.
+
+void SinglePlayDialog::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) //키보드 방향키 WASD를 각각 아래로 눌렀을때 is*Pressed true 변경 , 각각 10정도 이동
 {
 	switch (nChar) {
 	case 'S':
 	case 's':
-		airplane_Y += 10;
+		isSPressed = true;
 		break;
 
 	case 'A':
 	case 'a':
-		airplane_X -= 10;
+		isAPressed = true;
 		break;
 
 	case 'W':
 	case 'w':
-		airplane_Y -= 10;
+		isWPressed = true;
 		break;
 
 	case 'D':
 	case 'd':
-		airplane_X += 10;
+		isDPressed = true;
 		break;
 	}
 
 	Invalidate(TRUE);
 	CDialog::OnKeyDown(nChar, nRepCnt, nFlags);
 }
+
+void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent)
+{
+	switch(nIDEvent){
+	case 0:
+		
+		//비행기가 움직이는 메소드
+		drawAirplane();
+		//장애물 위에서 내려오는 메소드
+
+		// 탄이 발사 되는 메소드
+	}
+
+}
+
+void SinglePlayDialog::drawAirplane() //비행기 그리는 메소드
+{
+	
+	if (isSPressed) airPlaneLocation.SetPoint(airPlaneLocation.x, airPlaneLocation.y + 10);
+	if (isWPressed) airPlaneLocation.SetPoint(airPlaneLocation.x, airPlaneLocation.y - 10);
+	if (isAPressed) airPlaneLocation.SetPoint(airPlaneLocation.x-10, airPlaneLocation.y);
+	if (isDPressed) airPlaneLocation.SetPoint(airPlaneLocation.x+10, airPlaneLocation.y);
+
+	CClientDC dc(this);
+	CDC MemDC;
+	MemDC.CreateCompatibleDC(&dc);
+	CBitmap bitmap;
+	bitmap.LoadBitmap(IDB_PLANE);
+	CBitmap* oldbitmap = MemDC.SelectObject(&bitmap);
+	
+    dc.BitBlt(airPlaneLocation.x,airPlaneLocation.y, 200, 200, &MemDC, 120, 120, SRCCOPY);
+		
+	dc.SelectObject(oldbitmap);
+	bitmap.DeleteObject();
+
+}
+
+
+void SinglePlayDialog::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) //키보드 방향키 WASD를 release할때 is*Pressed =  false 변경 
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	switch (nChar) {
+	case 'S':
+	case 's':
+		isSPressed = false;
+		break;
+
+	case 'A':
+	case 'a':
+		isAPressed = false;
+		break;
+
+	case 'W':
+	case 'w':
+		isWPressed = false;		
+		break;
+
+	case 'D':
+	case 'd':
+		isDPressed = false;
+		break;
+
+	CDialog::OnKeyUp(nChar, nRepCnt, nFlags);
+}
+
