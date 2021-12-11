@@ -35,6 +35,7 @@ private:
 	const int airplaneYSize = 38; //비행기의 세로 크기
 
 	const int bulletFireRate = 6; //총알의 발사 term
+	const int enemyHitScore = 300; //적을 적중 시 증가하는 점수
 
 	const int plusScore = 5; //탄으로 적을 맞췄을때 5점의 점수 증가값 설정
 
