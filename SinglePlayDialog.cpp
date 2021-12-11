@@ -6,7 +6,7 @@
 #include "SinglePlayDialog.h" //싱글 플레이 버튼을 눌렀을때 뜨는 창을 SinglePlayDialog으로 변경했음.
 #include "afxdialogex.h"
 #include "Resource.h"
-
+#include "SendScoreDialog.h" //SinglePlayDialog에 SendScoreDialog.h 파일 추가했다.
 
 
 // SinglePlayDialog 대화 상자
@@ -132,6 +132,9 @@ void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent){
 		
 		Invalidate(TRUE);
 		timerCount++;
+
+		exitDialog(); //100초가 지나가면 종료하는 메소드 추가
+
 		break;
 	}
 
@@ -149,11 +152,24 @@ void SinglePlayDialog::processAirplane() //비행기 그리는 메소드
 
 	//비행기가 맵 안에서만 움직이도록 구현 - 추가(수정) 필요
 	if (airPlaneLocation.x > dialogXSize - airplaneXSize) airPlaneLocation.SetPoint(airPlaneLocation.x - planeSpeed, airPlaneLocation.y);
-	if (airPlaneLocation.y > dialogYSize - 62) airPlaneLocation.SetPoint(airPlaneLocation.x, airPlaneLocation.y - planeSpeed); //dialogYSize - 62, 62대신 airplaneYSize 했는데 원하는 모양이 안나와서 임의로 설정했음
-	
+	if (airPlaneLocation.y > dialogYSize - airplaneYSize*3/2) airPlaneLocation.SetPoint(airPlaneLocation.x, airPlaneLocation.y - planeSpeed); //dialogYSize - 62, 62대신 airplaneYSize 했는데 원하는 모양이 안나와서 임의로 설정했음
+	// airplaneYSize*3/2 --> 이 숫자는 화면 밖으로 안 나가게 하는 숫자 입니다.
 		
 	
-	//적을 맞았을때 비행기 최종 점수가 까인다?? - 추가 필요
+	//비행기가 적과 충돌시 종료 된다. - 추가 필요
+	for (auto& enemy : enemyList) {
+		if (pow(enemy.point.x - (airPlaneLocation.x+20),2) + pow(enemy.point.y - (airPlaneLocation.y+19), 2) < pow(30, 2)) //탄의 중심점과 비행기 비트맵의 정중앙 위치의 좌표가 20안에 있으면 종료된다.
+		{
+			SendScoreDialog SendScoreDialog;   //SendScoreDialog 클래스를 SendScoreDialog로 선언
+			UpdateData(TRUE);
+			KillTimer(0);
+			SendScoreDialog.DoModal();
+			OnOK();
+			UpdateData(FALSE);
+		}
+
+	
+	}
 
 
 }
@@ -194,6 +210,23 @@ void SinglePlayDialog::processBullet() {	//총알의 이동을 제어하는 메�
 	std::remove_if(bulletList.begin(), bulletList.end(), deleteOutsideBullet);
 }
 
+void SinglePlayDialog::exitDialog()
+{
+	const int last3mins = this->maxTime; //last3mins를 const로 생성한 후 상수로 작동하도록 하였습니다.
+	if (timerCount > last3mins) //OnOK()자리에 팝업 창이 나오면서 현재 얻는 점수가 출력이 되는 메소드를 넣고 그 메소드 맨마지막에 OnOK()를 넣으면 된다.
+	{
+		SendScoreDialog SendScoreDialog;   //SendScoreDialog 클래스를 SendScoreDialog로 선언
+		UpdateData(TRUE);
+		KillTimer(0);
+	    SendScoreDialog.DoModal();            //모달 창 나오고 확인 누르면 메뉴창까지 나간다.
+		OnOK();
+		UpdateData(FALSE);
+	}
+
+}
+
+
+
 void SinglePlayDialog::processEnemy() {
 	//적을 생성하는 부분
 	std::uniform_int_distribution<int> enemyGen(0, maxEnemyGen);	//생성하는 적 숫자를 설정하는 난수
@@ -218,7 +251,8 @@ void SinglePlayDialog::processEnemy() {
 
 	//탄에 맞은 적을 삭제하는 람다 표현식
 	const int enemySize = this->enemySize;
-	const int enemyHitScore = this->enemyHitScore;
+
+  const int enemyHitScore = this->enemyHitScore;
 	int* score = &this->score;
 	for (auto bullet : bulletList) {
 		//(x좌표차^2)+(y좌표차^2)가 실제 원 반지름 안쪽에 있는 경우, true를 반환하는 람다식
@@ -231,6 +265,9 @@ void SinglePlayDialog::processEnemy() {
 			else {
 				return false;}			
 		};
+
+		
+
 		//checkDist 람다식을 기반으로, 일정 범위 안에 들어올 경우, 데이터를 삭제시킨다.
 		std::remove_if(enemyList.begin(), enemyList.end(), checkDist);
 	}
