@@ -88,7 +88,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -183,8 +183,6 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="HttpConnClass.h" />
-    <ClInclude Include="LeaderboardDialog.h" />
     <ClInclude Include="SinglePlayDialog.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="MFC_keyboardGame.h" />
@@ -194,8 +192,6 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="HttpConnClass.cpp" />
-    <ClCompile Include="LeaderboardDialog.cpp" />
     <ClCompile Include="SinglePlayDialog.cpp" />
     <ClCompile Include="MFC_keyboardGame.cpp" />
     <ClCompile Include="MFC_keyboardGameDlg.cpp" />
