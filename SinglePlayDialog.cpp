@@ -6,7 +6,6 @@
 #include "SinglePlayDialog.h" //싱글 플레이 버튼을 눌렀을때 뜨는 창을 SinglePlayDialog으로 변경했음.
 #include "afxdialogex.h"
 #include "Resource.h"
-#include "SendScoreDialog.h" //SinglePlayDialog에 SendScoreDialog.h 파일 추가했다.
 
 
 // SinglePlayDialog 대화 상자
@@ -14,7 +13,7 @@
 IMPLEMENT_DYNAMIC(SinglePlayDialog, CDialog)
 
 SinglePlayDialog::SinglePlayDialog(CWnd* pParent /*=nullptr*/)
-	: CDialog(IDD_SINGLEPLAY_DIALOG, pParent)
+	: CDialog(IDD_DIALOG1, pParent)
 {
 
 	
@@ -34,9 +33,7 @@ BEGIN_MESSAGE_MAP(SinglePlayDialog, CDialog)
 	ON_WM_PAINT()
 	ON_WM_KEYDOWN()
 	ON_WM_KEYUP()
-	ON_WM_GETMINMAXINFO()
 	ON_WM_TIMER()
-	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 
@@ -48,72 +45,21 @@ BOOL SinglePlayDialog::OnInitDialog() //비행기 비트맵을 LOAD하는걸 잘
 {
 	CDialog::OnInitDialog();
 
-	//다이얼로그의 크기를 고정시킴
-	MoveWindow(0, 0, dialogXSize, dialogYSize);
-
-	airPlaneLocation.x = 600;
-	airPlaneLocation.y = 720;
-
-
-	std::random_device randDev;
-	randEng.seed(randDev());
-
-	SetTimer(0, timerTick, NULL);  //실행 후, 바로 타이머가 켜짐
+	airPlaneLocation.x = 100;
+	airPlaneLocation.y = 100;
 
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
 }
 
-void SinglePlayDialog::OnGetMinMaxInfo(MINMAXINFO* lpMMI){
-	// 창의 크기를 고정 시킴 - 최대로 늘어나는 범위, 최소로 줄어드는 범위 설정
-	lpMMI->ptMinTrackSize = CPoint(dialogXSize, dialogYSize);
-	lpMMI->ptMaxTrackSize = CPoint(dialogXSize, dialogYSize);
 
-
-	CDialog::OnGetMinMaxInfo(lpMMI);
+void SinglePlayDialog::OnPaint()  //싱글 게임 실행시SinglePlayDialog에 비행기 TEXT문자를 그리기 위해서 추가했다.
+{
+	
 }
 
-//싱글 게임 실행시SinglePlayDialog에 비행기 TEXT문자를 그리기 위해서 추가했다.
-void SinglePlayDialog::OnPaint()
-{
-	CPaintDC dc(this); // device context for painting
-					   // TODO: 여기에 메시지 처리기 코드를 추가합니다.
-					   // 그리기 메시지에 대해서는 CDialog::OnPaint()을(를) 호출하지 마십시오.
 
-
-	//비행기 그리기
-	CClientDC cdc(this);
-	CDC MemDC;
-	MemDC.CreateCompatibleDC(&cdc);
-	CBitmap bitmap;
-	bitmap.LoadBitmap(IDB_PLANE);
-	CBitmap* oldbitmap = MemDC.SelectObject(&bitmap);
-	cdc.BitBlt(airPlaneLocation.x-(airplaneXSize/2), airPlaneLocation.y-(airplaneYSize/2),
-		airplaneXSize, airplaneYSize, &MemDC, 0, 0, SRCCOPY);
-	cdc.SelectObject(oldbitmap);
-	bitmap.DeleteObject();
-
-	//원 그리기 , brush 사용
-	CBrush brush;
-	brush.CreateSolidBrush(RGB(255, 255, 255));
-	CBrush* oldbrush = cdc.SelectObject(&brush);
-	for (auto& enemy : enemyList) {
-		cdc.Ellipse(enemy.point.x - enemySize, enemy.point.y - enemySize, enemy.point.x + enemySize, enemy.point.y + enemySize); // enemy.point.x , y가 중심점
-	}
-	cdc.SelectObject(&oldbrush);
-	brush.DeleteObject();
-
-	//탄 그리기 필요
-	    
-	brush.CreateSolidBrush(RGB(255, 0, 0)); //빨간색 원의 반지름 4 => 탄
-	oldbrush = dc.SelectObject(&brush); //oldbrush 변수 중첩 수정
-	for (auto bullet : bulletList) {
-		dc.Ellipse(bullet.x - bulletSize, bullet.y - bulletSize, bullet.x + bulletSize, bullet.y + bulletSize); // bullet.point.x , y가 중심점
-
-	}
-	dc.SelectObject(&oldbrush);
-	brush.DeleteObject();
 
 	
 	
@@ -309,20 +255,52 @@ void SinglePlayDialog::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) //키보
 	case 'd':
 		isDPressed = true;
 		break;
-
-	case 'J':
-	case 'j':
-		isJPressed = true; //눌렀을때 true
-		break;
-
 	}
 
 	Invalidate(TRUE);
 	CDialog::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
+void SinglePlayDialog::OnTimer(UINT_PTR nIDEvent)
+{
+	switch(nIDEvent){
+	case 0:
+		
+		//비행기가 움직이는 메소드
+		drawAirplane();
+		//장애물 위에서 내려오는 메소드
+
+		// 탄이 발사 되는 메소드
+	}
+
+}
+
+void SinglePlayDialog::drawAirplane() //비행기 그리는 메소드
+{
+	
+	if (isSPressed) airPlaneLocation.SetPoint(airPlaneLocation.x, airPlaneLocation.y + 10);
+	if (isWPressed) airPlaneLocation.SetPoint(airPlaneLocation.x, airPlaneLocation.y - 10);
+	if (isAPressed) airPlaneLocation.SetPoint(airPlaneLocation.x-10, airPlaneLocation.y);
+	if (isDPressed) airPlaneLocation.SetPoint(airPlaneLocation.x+10, airPlaneLocation.y);
+
+	CClientDC dc(this);
+	CDC MemDC;
+	MemDC.CreateCompatibleDC(&dc);
+	CBitmap bitmap;
+	bitmap.LoadBitmap(IDB_PLANE);
+	CBitmap* oldbitmap = MemDC.SelectObject(&bitmap);
+	
+    dc.BitBlt(airPlaneLocation.x,airPlaneLocation.y, 200, 200, &MemDC, 120, 120, SRCCOPY);
+		
+	dc.SelectObject(oldbitmap);
+	bitmap.DeleteObject();
+
+}
+
+
 void SinglePlayDialog::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) //키보드 방향키 WASD를 release할때 is*Pressed =  false 변경 
 {
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	switch (nChar) {
 	case 'S':
 	case 's':
@@ -336,7 +314,7 @@ void SinglePlayDialog::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) //키보�
 
 	case 'W':
 	case 'w':
-		isWPressed = false;
+		isWPressed = false;		
 		break;
 
 	case 'D':
@@ -344,11 +322,6 @@ void SinglePlayDialog::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) //키보�
 		isDPressed = false;
 		break;
 
-	case 'J':
-	case 'j':
-		isJPressed = false;
-		break;
-
-		CDialog::OnKeyUp(nChar, nRepCnt, nFlags);
-	}
+	CDialog::OnKeyUp(nChar, nRepCnt, nFlags);
 }
+

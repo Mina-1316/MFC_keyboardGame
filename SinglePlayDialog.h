@@ -1,15 +1,5 @@
 ﻿#pragma once
-#include <list>
-#include <random>
-#include <cstdlib>
-#include <cmath>
 
-// 현 위치, 속도벡터를 담기 위한 구조체
-// 매 타이머 틱마다 벡터 방향으로 움직이도록 구현, vector 범위 내에서 랜덤으로 생성
-struct Enemy {
-	CPoint point;
-	CPoint vector;
-};
 
 // SinglePlayDialog 대화 상자
 
@@ -81,7 +71,7 @@ public:
 
 // 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
-	enum { IDD = IDD_SINGLEPLAY_DIALOG };
+	enum { IDD = IDD_DIALOG1 };
 #endif
 
 protected:
@@ -91,11 +81,21 @@ protected:
 public:
 	
 	virtual BOOL OnInitDialog();
+	afx_msg void OnPaint();
 	
+     //각각의 버튼 눌렀을때의 true,false 눌렀을때 true , 때면 false
+	bool isWPressed;
+	bool isAPressed;
+	bool isSPressed;
+	bool isDPressed;
 	CPoint airPlaneLocation; //비행기의 위치 CPoint로 생성
 	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
-	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
-	afx_msg void OnPaint();
+
+	//비행기 움직이기 위한 메소드
+	void drawAirplane();
+	//장애물이 떨어지기 위한 메소드
+
+	// 탄이 발사되기 위한 메소드
 };
