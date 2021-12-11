@@ -1,9 +1,12 @@
 #include "HttpConnClass.h"
 
+//Header definition. If you want to add more, just add at Header, and below this source both.
+const char* HttpConnClass::jsonHeader = "Content-Type: application/json";
+
 //function that returns the response to Json format
-Json::Value HttpConnClass::jsonPostRequest(const char domain[], const char postData[])
+Json::Value HttpConnClass::jsonPostRequest(const char domain[], const char body[])
 {
-	std::string response = url_post_proc(domain, postData);
+	std::string response = url_post_proc(domain, body);
 
 	Json::Value json;
 	Json::CharReaderBuilder reader;
@@ -22,25 +25,29 @@ Json::Value HttpConnClass::jsonPostRequest(const char domain[], const char postD
 }
 
 //function that returns the response to string format
-std::string HttpConnClass::stringPostRequest(const char domain[], const char postData[])
+std::string HttpConnClass::stringPostRequest(const char domain[], const char body[])
 {
-	return url_post_proc(domain, postData);
+	return url_post_proc(domain, body);
 }
 
 //functions for request POST connection
-std::string HttpConnClass::url_post_proc(const char url[], const char post_data[])
+std::string HttpConnClass::url_post_proc(const char url[], const char body[])
 {
 	CURL* curl;
 	CURLcode res;
 	curl = curl_easy_init();
 	std::string chunk;
 
+	struct curl_slist* headerlist = nullptr;
+	headerlist = curl_slist_append(headerlist, jsonHeader);
+
 	if (curl)
 	{
 		curl_easy_setopt(curl, CURLOPT_URL, url);
 		curl_easy_setopt(curl, CURLOPT_POST, 1);
-		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post_data);
-		curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, strlen(post_data));
+		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headerlist);
+		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body);
+		curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, strlen(body));
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, callBackFunc);
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (std::string*)&chunk);
 		curl_easy_setopt(curl, CURLOPT_PROXY, "");
