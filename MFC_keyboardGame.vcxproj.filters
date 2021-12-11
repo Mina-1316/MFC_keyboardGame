@@ -36,7 +36,6 @@
     <ClInclude Include="SinglePlayDialog.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="SendScoreDialog.h">
     <ClInclude Include="LeaderboardDialog.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -57,7 +56,6 @@
     <ClCompile Include="SinglePlayDialog.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="SendScoreDialog.cpp">
     <ClCompile Include="LeaderboardDialog.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
