@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++¿¡¼­ »ı¼ºÇÑ Æ÷ÇÔ ÆÄÀÏÀÔ´Ï´Ù.
-// MFCkeyboardGame.rc¿¡¼­ »ç¿ëµÇ°í ÀÖ½À´Ï´Ù.
+// Microsoft Visual C++ì—ì„œ ìƒì„±í•œ í¬í•¨ íŒŒì¼ì…ë‹ˆë‹¤.
+// MFCkeyboardGame.rcì—ì„œ ì‚¬ìš©ë˜ê³  ìˆìŠµë‹ˆë‹¤.
 //
 #define IDM_ABOUTBOX                    0x0010
 #define IDD_ABOUTBOX                    100
@@ -14,6 +14,7 @@
 #define IDB_PLANE                       132
 #define IDD_SINGLEPLAY_DIALOG           134
 #define IDD_SendScore_DIALOG            138
+#define IDD_DIALOG_LEADERBOARD          134
 #define IDC_BUTTON1                     1000
 #define IDC_BUTTON_SINGLEPLAY           1000
 #define IDC_BUTTON2                     1001
@@ -33,5 +34,6 @@
 #define _APS_NEXT_COMMAND_VALUE         32771
 #define _APS_NEXT_CONTROL_VALUE         1005
 #define _APS_NEXT_SYMED_VALUE           101
+
 #endif
 #endif

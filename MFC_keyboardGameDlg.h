@@ -35,4 +35,5 @@ public:
 	afx_msg void OnBnClickedButtonExit();
 	
 	afx_msg void OnBnClickedButtonSingleplay();
+	afx_msg void OnBnClickedButtonLeaderboard();
 };
