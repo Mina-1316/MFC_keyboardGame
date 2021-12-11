@@ -12,7 +12,7 @@ class LeaderboardDialog : public CDialog
 	//-----상수-----
 private:
 	//http 통신에 필요함
-	const char* serverDomain = "http://:8091/getscore";
+	const char* serverDomain = "http://localhost:8091/getscore";
 	const char* requestBody = "";
 
 	//그리기를 시작할 지점, 각 지점간의 갭 등을 설정

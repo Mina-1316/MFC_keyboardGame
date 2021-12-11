@@ -12,7 +12,9 @@
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
+
 #include "SinglePlayDialog.h" //싱글플레이 눌렀을때 나오는 모달창.h을 include
+#include "LeaderboardDialog.h" //점수표를 눌렀을 때 나오는 모달창 include
 
 
 // 응용 프로그램 정보에 사용되는 CAboutDlg 대화 상자입니다.
@@ -70,6 +72,7 @@ BEGIN_MESSAGE_MAP(CMFCkeyboardGameDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_EXIT, &CMFCkeyboardGameDlg::OnBnClickedButtonExit)
 	ON_BN_CLICKED(IDC_BUTTON_SINGLEPLAY, &CMFCkeyboardGameDlg::OnBnClickedButtonSingleplay)
 	ON_BN_CLICKED(IDC_BUTTON_SINGLEPLAY, &CMFCkeyboardGameDlg::OnBnClickedButtonSingleplay)
+	ON_BN_CLICKED(IDC_BUTTON_LEADERBOARD, &CMFCkeyboardGameDlg::OnBnClickedButtonLeaderboard)
 END_MESSAGE_MAP()
 
 
@@ -173,6 +176,19 @@ void CMFCkeyboardGameDlg::OnBnClickedButtonSingleplay()
 	SinglePlayDialog PopupDialog; //싱글 플레이를 눌렀을때 모달창을 띄움
 	UpdateData(TRUE);
 	if (PopupDialog.DoModal() == IDOK) {
-		UpdateData(FALSE);
+		
 	}
+	UpdateData(FALSE);
+}
+
+//점수표 버튼 클릭시 실행
+//Leaderboard Dialog를 모달 형식으로 실행시킨다.
+void CMFCkeyboardGameDlg::OnBnClickedButtonLeaderboard()
+{
+	LeaderboardDialog popupDialog;
+	UpdateData(TRUE);
+	if (popupDialog.DoModal() == IDOK) {
+
+	}
+	UpdateData(FALSE);
 }
