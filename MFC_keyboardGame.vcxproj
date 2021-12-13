@@ -24,6 +24,7 @@
     <ClInclude Include="LeaderboardDialog.h" />
     <ClInclude Include="MFC_keyboardGame.h" />
     <ClInclude Include="MFC_keyboardGameDlg.h" />
+    <ClInclude Include="MultiPlayDialog.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SendScoreDialog.h" />
@@ -35,6 +36,7 @@
     <ClCompile Include="LeaderboardDialog.cpp" />
     <ClCompile Include="MFC_keyboardGame.cpp" />
     <ClCompile Include="MFC_keyboardGameDlg.cpp" />
+    <ClCompile Include="MultiPlayDialog.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="SendScoreDialog.cpp" />
     <ClCompile Include="SinglePlayDialog.cpp" />

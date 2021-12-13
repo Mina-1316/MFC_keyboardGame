@@ -14,6 +14,8 @@
 #define IDD_SINGLEPLAY_DIALOG           134
 #define IDD_SENDSCORE_DIALOG            140
 #define IDD_DIALOG_LEADERBOARD          141
+#define IDD_DIALOG1                     143
+#define IDD_MultiPlayDialog             143
 #define IDC_BUTTON1                     1000
 #define IDC_BUTTON_SINGLEPLAY           1000
 #define IDC_BUTTON2                     1001
@@ -30,7 +32,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        143
+#define _APS_NEXT_RESOURCE_VALUE        145
 #define _APS_NEXT_COMMAND_VALUE         32771
 #define _APS_NEXT_CONTROL_VALUE         1006
 #define _APS_NEXT_SYMED_VALUE           106
