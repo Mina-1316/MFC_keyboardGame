@@ -236,14 +236,14 @@ BOOL MultiPlayDialog::OnInitDialog()
 
 	NetworkSelectDialog dialog;
 	//dialog.setNetworkSocket(&serverSocket, &clientSocket);
-	dialog.setNetworkSocket(&udpSocket);
+	dialog.setNetworkSocket(&clientSocket, &serverSocket);
 	UpdateData(true);
 	if (dialog.DoModal() != IDOK) {
 		MessageBox(_T("통신이 취소되었습니다."), _T(""), MB_OK | MB_ICONWARNING);
 		OnCancel();
 	}
 	serverSocket.setParentWnd(this);
-	serverSocket.setParentWnd(this);
+	clientSocket.setParentWnd(this);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
@@ -254,7 +254,7 @@ BOOL MultiPlayDialog::OnInitDialog()
 //소켓 이벤트 핸들러
 void MultiPlayDialog::OnAccept()
 {
-
+	
 }
 
 void MultiPlayDialog::OnClose()

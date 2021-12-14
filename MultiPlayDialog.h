@@ -50,7 +50,6 @@ private:
 	MultiPlaySocket clientSocket = MultiPlaySocket(this);
 	MultiPlaySocket serverSocket = MultiPlaySocket(this);
 
-	MultiPlaySocket udpSocket = MultiPlaySocket(this);
 
 	CString tgtAddress;
 
