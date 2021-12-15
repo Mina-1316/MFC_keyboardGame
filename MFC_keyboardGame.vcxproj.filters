@@ -45,6 +45,18 @@
     <ClInclude Include="LeaderboardDialog.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="MultiPlayDialog.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MultiPlaySocket.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkSelectDialog.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkHandlerClass.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -68,12 +80,24 @@
     <ClCompile Include="LeaderboardDialog.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="MultiPlayDialog.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MultiPlaySocket.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkSelectDialog.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\plane.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="res\MFC_keyboardGame.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\enemyplane.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>
