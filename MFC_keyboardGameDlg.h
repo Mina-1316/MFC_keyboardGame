@@ -36,4 +36,5 @@ public:
 	
 	afx_msg void OnBnClickedButtonSingleplay();
 	afx_msg void OnBnClickedButtonLeaderboard();
+	afx_msg void OnBnClickedButtonInternetplay();
 };

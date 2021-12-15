@@ -24,7 +24,7 @@ protected:
 public:
 	//-----const------
 	const int servPort = 11210;
-	const int clientPort = 11211;
+	const int clientPort = 11212;
 	const int rBufSize = 1024;
 
 	//const int tcpPort = 11211;		//TCP소켓이 사용하는 포트, client는 +1
@@ -36,6 +36,7 @@ public:
 	MultiPlaySocket* cSocket = nullptr;
 	MultiPlaySocket* sSocket = nullptr;		//소켓 포인터
 
+	bool isServer = false;
 	
 
 	//-----Methods-----

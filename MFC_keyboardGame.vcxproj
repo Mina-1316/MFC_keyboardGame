@@ -47,6 +47,7 @@
     <ClCompile Include="SinglePlayDialog.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\enemyplane.bmp" />
     <Image Include="res\MFC_keyboardGame.ico" />
     <Image Include="res\plane.bmp" />
   </ItemGroup>
@@ -167,7 +168,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>

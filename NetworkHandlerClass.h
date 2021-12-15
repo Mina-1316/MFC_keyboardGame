@@ -9,7 +9,7 @@ public:
 
 	}
 	virtual void OnConnect() {
-
+		
 	}
 	virtual void OnReceive() {
 

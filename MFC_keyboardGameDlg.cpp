@@ -8,6 +8,7 @@
 #include "MFC_keyboardGameDlg.h"
 #include "afxdialogex.h"
 #include "LeaderboardDialog.h"
+#include "MultiPlayDialog.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -71,6 +72,7 @@ BEGIN_MESSAGE_MAP(CMFCkeyboardGameDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_SINGLEPLAY, &CMFCkeyboardGameDlg::OnBnClickedButtonSingleplay)
 	ON_BN_CLICKED(IDC_BUTTON_SINGLEPLAY, &CMFCkeyboardGameDlg::OnBnClickedButtonSingleplay)
 	ON_BN_CLICKED(IDC_BUTTON_LEADERBOARD, &CMFCkeyboardGameDlg::OnBnClickedButtonLeaderboard)
+	ON_BN_CLICKED(IDC_BUTTON_INTERNETPLAY, &CMFCkeyboardGameDlg::OnBnClickedButtonInternetplay)
 END_MESSAGE_MAP()
 
 
@@ -178,6 +180,15 @@ void CMFCkeyboardGameDlg::OnBnClickedButtonLeaderboard()
 {
 	LeaderboardDialog PopupDialog; //최고 점수를 눌렀을 때 호출되는 모달창
 	if (PopupDialog.DoModal() == IDOK) {
+
+	}
+}
+
+
+void CMFCkeyboardGameDlg::OnBnClickedButtonInternetplay()
+{
+	MultiPlayDialog dialog;
+	if (dialog.DoModal() == IDOK) {
 
 	}
 }

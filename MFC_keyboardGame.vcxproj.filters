@@ -97,6 +97,9 @@
     <Image Include="res\MFC_keyboardGame.ico">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="res\enemyplane.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MFCkeyboardGame.rc">

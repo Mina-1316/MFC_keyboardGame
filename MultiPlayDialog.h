@@ -18,6 +18,7 @@ private:
 	//----const-----
 	//시스템 사용
 	const int timerTick = 70; //Timer 틱 간격
+	const int serverTimerTick = 50; //서버에 데이터가 전송되는 주기, 처리시간 고려해서 더 빨리 돔
 	const int dialogXSize = 1200; //창의 X축 크기1200
 	const int dialogYSize = 800; //창의 Y축 크기800
 
@@ -28,6 +29,7 @@ private:
 	const int bulletSpeed = 10; //총알의 속도 
 	const int bulletSize = 4; //총알의 반지름(원 )
 	const int bulletFireRate = 6; //총알의 발사 term 
+	const int maxTime = 300;
 
 	//네트워크
 	const int networkBufferSize = 2048; //네트워크로부터 받는 통신의 버퍼 사이즈
@@ -35,6 +37,7 @@ private:
 	//-----var-----
 	//기존의 직접 만든 Single LinkedList에서 STL에서 지원하는 list로 교체
 	std::list<CPoint> bulletList;	//총알의 위치가 저장되는 배열
+	std::list<CPoint> enemyBulletList; //적이 사격한 총알의 위치가 저장되는 배열
 
 	//각각의 버튼 눌렀을때의 true,false 눌렀을때 true , 때면 false
 	bool isWPressed = false;
@@ -43,12 +46,18 @@ private:
 	bool isDPressed = false;
 	bool isJPressed = false;
 
+	bool isGunFired = false;
+	bool isDefeated = false;
+	bool isEnemyGunFired = false;
+	bool isEnemyDefeated = false;
+
+	bool isServer = false;
 
 	int timerCount = 0;		//시간이 얼마나 지났는지를 체크하는 변수
 	int bulletTimer = 0;	//탄의 연사 속도를 조절하는 타이머 
 
-	MultiPlaySocket clientSocket = MultiPlaySocket(this);
-	MultiPlaySocket serverSocket = MultiPlaySocket(this);
+	MultiPlaySocket clientSocket;
+	MultiPlaySocket serverSocket;
 
 
 	CString tgtAddress;
@@ -67,6 +76,12 @@ public:
 	virtual void OnReceive();
 	virtual void OnSend();
 
+	//데이터를 네트워크에 전송하는 메소드
+	void sendJsonData();
+	void receiveJsonData();
+
+	//대화상자를 종료하는 메소드
+	void exitDialog();
 
 public:
 	MultiPlayDialog(CWnd* pParent = nullptr);   // 표준 생성자입니다.

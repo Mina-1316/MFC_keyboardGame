@@ -15,7 +15,6 @@ IMPLEMENT_DYNAMIC(NetworkSelectDialog, CDialog)
 
 NetworkSelectDialog::NetworkSelectDialog(CWnd* pParent /*=nullptr*/)
 	: CDialog(IDD_DNETCONN, pParent)
-	, ipInput(_T(""))
 {
 
 }
@@ -29,8 +28,8 @@ void NetworkSelectDialog::setNetworkSocket(MultiPlaySocket* sPtr, MultiPlaySocke
 	cSocket = cPtr;
 	sSocket = sPtr;
 
-	cSocket->setParentWnd(this);
-	sSocket->setParentWnd(this);
+	cSocket->setParentWnd((NetworkHandler*)this);
+	sSocket->setParentWnd((NetworkHandler*)this);
 }
 
 //UDP
@@ -60,6 +59,7 @@ void NetworkSelectDialog::OnBnClickedBconnect()
 	GetDlgItem(IDC_EDIT_IPIN)->EnableWindow(false);
 	GetDlgItem(IDC_BHOST)->EnableWindow(false);
 	GetDlgItem(IDC_BCONNECT)->EnableWindow(false);
+	isServer = false;
 	
 	UpdateData(true);
 	cSocket->Create(clientPort);
@@ -72,25 +72,25 @@ void NetworkSelectDialog::OnBnClickedBhost()
 	GetDlgItem(IDC_EDIT_IPIN)->EnableWindow(false);
 	GetDlgItem(IDC_BHOST)->EnableWindow(false);
 	GetDlgItem(IDC_BCONNECT)->EnableWindow(false);
+	isServer = true;
 
 	sSocket->Create(servPort);
 	sSocket->Listen();
 }
 
-void NetworkSelectDialog::OnReceive() {
+void NetworkSelectDialog::OnReceive() 
+{
 	
-
 }
 
 void NetworkSelectDialog::OnConnect()
 {
-	
 	OnOK();
 }
 
 void NetworkSelectDialog::OnAccept()
 {
-	
+	sSocket->Accept(*cSocket);
 	OnOK();
 }
 
